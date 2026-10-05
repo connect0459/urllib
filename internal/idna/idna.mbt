@@ -341,7 +341,6 @@ fn is_idna_forbidden_cp(cp : Int) -> Bool {
   cp == 0xFF61 ||
   cp == 0xFE12 ||
   cp == 0xFE52 ||
-  (cp >= 0x34000 && cp <= 0x3FFFF) ||
   (cp >= 0x40000 && cp <= 0xDFFFF) ||
   (cp >= 0xE1000 && cp <= 0xEFFFF) ||
   (cp >= 0xE000 && cp <= 0xF8FF) ||
