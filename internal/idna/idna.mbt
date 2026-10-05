@@ -384,6 +384,7 @@ pub fn domain_to_ascii(domain : String) -> String raise IdnaParseError {
     raise IdnaParseError("empty domain")
   }
   let labels = @pe.split_on_char(mapped, '.')
+  let domain_is_ascii = mapped.iter().all(fn(c) { c.to_int() <= 0x7F })
   let out = StringBuilder()
   for i, label in labels {
     if i > 0 {
@@ -422,7 +423,7 @@ pub fn domain_to_ascii(domain : String) -> String raise IdnaParseError {
       out.write_string("xn--")
       out.write_string(encoded)
     } else {
-      if label.has_prefix("xn--") {
+      if label.has_prefix("xn--") && !domain_is_ascii {
         let suffix = label[4:].to_owned()
         if suffix.is_empty() {
           raise IdnaParseError("invalid ACE label: empty xn-- extension")
