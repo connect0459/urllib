@@ -1,13 +1,13 @@
 lockfile_version: '1'
-generated_at: '2026-10-05T12:16:02.747700+00:00'
+generated_at: '2026-10-05T12:45:03.216099+00:00'
 apm_version: 0.33.0
 dependencies:
 - repo_url: moonbitlang/skills
   name: moonbit-skills
   host: github.com
-  resolved_commit: 607f93a413cac702e75d946aa53c81b40edbcb50
-  resolved_ref: 607f93a413cac702e75d946aa53c81b40edbcb50
-  version: 607f93a
+  resolved_commit: 8b9f1bad14bc62560dbe3537855379e561a4e066
+  resolved_ref: 8b9f1bad14bc62560dbe3537855379e561a4e066
+  version: 8b9f1ba
   package_type: marketplace_plugin
   deployed_files:
   - .agents/skills/moonbit-agent-guide
@@ -88,13 +88,13 @@ dependencies:
     .claude/skills/make-moonbit-c-bindings/templates/wrapper.c: sha256:5b18337cca7239e761fbd25fc679b0e203c7a51abbb0b2ee0320e89b6bc2e37e
     .claude/skills/moonbit-agent-guide/.gitignore: sha256:0d85bcad78281a70f6540deb184a1b9398e34acaa5ff6dd3f544d6b21b6f92ca
     .claude/skills/moonbit-agent-guide/LICENSE: sha256:cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30
-    .claude/skills/moonbit-agent-guide/README.md: sha256:eb1b649a7203ed9e2b3dd774d1c144343f74d605fa3eda7d733216445b9b6ee6
-    .claude/skills/moonbit-agent-guide/SKILL.mbt.md: sha256:ac4718173b33a39c7840fde4a4aeb0a0fa3ff893979799466915c961cd32d890
-    .claude/skills/moonbit-agent-guide/SKILL.md: sha256:ac4718173b33a39c7840fde4a4aeb0a0fa3ff893979799466915c961cd32d890
+    .claude/skills/moonbit-agent-guide/README.md: sha256:56a0944128cadba7c4c21841763268496fbfddd7615e7bb44a77a5564704c166
+    .claude/skills/moonbit-agent-guide/SKILL.mbt.md: sha256:3327082acd62f395e8a953dbb4e5e3b13fe8164e746834a7ff2453aac3104522
+    .claude/skills/moonbit-agent-guide/SKILL.md: sha256:3327082acd62f395e8a953dbb4e5e3b13fe8164e746834a7ff2453aac3104522
     .claude/skills/moonbit-agent-guide/ide.md: sha256:56fa73e1b8d472bf5b72e444c862bc54b3311fa2d5c78b853a6557c872289c70
-    .claude/skills/moonbit-agent-guide/references/advanced-moonbit-build.md: sha256:a7d71b0738b814414edc5cfcbeff66931870da4d515f7aa864e6e51a3e8ed708
-    .claude/skills/moonbit-agent-guide/references/moonbit-language-fundamentals.mbt.md: sha256:9d4e3fb88a61916552a8f4d27d9e1383c926fd641fde11032e998c4ffd7d09bd
-    .claude/skills/moonbit-agent-guide/references/moonbit-language-fundamentals.md: sha256:9d4e3fb88a61916552a8f4d27d9e1383c926fd641fde11032e998c4ffd7d09bd
+    .claude/skills/moonbit-agent-guide/references/advanced-moonbit-build.md: sha256:87800041d51fe4756c34a19238ea8b6ca0df53c87f461730dffd6d8f5873370f
+    .claude/skills/moonbit-agent-guide/references/moonbit-language-fundamentals.mbt.md: sha256:968505849ab14eaefc9c449b47da5d11b3049a45969bdedca7e42a0742a81272
+    .claude/skills/moonbit-agent-guide/references/moonbit-language-fundamentals.md: sha256:968505849ab14eaefc9c449b47da5d11b3049a45969bdedca7e42a0742a81272
     .claude/skills/moonbit-c-binding/SKILL.md: sha256:d71c8098d32e13abae19c2e453693882f075a6a7cd585508baa6554966a06dd1
     .claude/skills/moonbit-c-binding/references/asan-validation.md: sha256:e97e1aeb3128d4adadbd984a19f6293d2adec54fd702e0e2adf02211c0d9679b
     .claude/skills/moonbit-c-binding/references/callbacks.md: sha256:4e6d069579a15e7ab659b19a78512d10ca20d2cddc2a8d8a156e79b89935b8f0
@@ -122,7 +122,7 @@ dependencies:
     .claude/skills/moonbit-spec-test-development/references/templates.md: sha256:4e00df87b9e899236a0c1f9316dc21e6984027ff3edee433c927bd6ac5bfb608
     .claude/skills/ocaml2moonbit-migration/SKILL.md: sha256:63e7d70677eee86f0ceba3a5aed7d9ff0d1597ba39b39808cafdaef21ce276d4
     .claude/skills/ocaml2moonbit-migration/agents/openai.yaml: sha256:84496f8f729112384460715b14cfae43c164dd3c4a62c2bbf4c9a7fa0be3c35e
-  content_hash: sha256:103ec2024fd686a02d94b2dea877174915e34c888f2272ddf7cb4e82a10b4c0f
+  content_hash: sha256:2cc2c14f0561075081e629dcedc9540620a79b2afa3df1f03851110bf663e98c
 deployments:
 - kind: project-relative
   target: claude
@@ -267,7 +267,7 @@ deployments:
   owners:
   - moonbitlang/skills
   active_owner: moonbitlang/skills
-  content_hash: sha256:eb1b649a7203ed9e2b3dd774d1c144343f74d605fa3eda7d733216445b9b6ee6
+  content_hash: sha256:56a0944128cadba7c4c21841763268496fbfddd7615e7bb44a77a5564704c166
 - kind: project-relative
   target: claude
   value: .claude/skills/moonbit-agent-guide/SKILL.mbt.md
@@ -276,7 +276,7 @@ deployments:
   owners:
   - moonbitlang/skills
   active_owner: moonbitlang/skills
-  content_hash: sha256:ac4718173b33a39c7840fde4a4aeb0a0fa3ff893979799466915c961cd32d890
+  content_hash: sha256:3327082acd62f395e8a953dbb4e5e3b13fe8164e746834a7ff2453aac3104522
 - kind: project-relative
   target: claude
   value: .claude/skills/moonbit-agent-guide/SKILL.md
@@ -285,7 +285,7 @@ deployments:
   owners:
   - moonbitlang/skills
   active_owner: moonbitlang/skills
-  content_hash: sha256:ac4718173b33a39c7840fde4a4aeb0a0fa3ff893979799466915c961cd32d890
+  content_hash: sha256:3327082acd62f395e8a953dbb4e5e3b13fe8164e746834a7ff2453aac3104522
 - kind: project-relative
   target: claude
   value: .claude/skills/moonbit-agent-guide/ide.md
@@ -303,7 +303,7 @@ deployments:
   owners:
   - moonbitlang/skills
   active_owner: moonbitlang/skills
-  content_hash: sha256:a7d71b0738b814414edc5cfcbeff66931870da4d515f7aa864e6e51a3e8ed708
+  content_hash: sha256:87800041d51fe4756c34a19238ea8b6ca0df53c87f461730dffd6d8f5873370f
 - kind: project-relative
   target: claude
   value: .claude/skills/moonbit-agent-guide/references/moonbit-language-fundamentals.mbt.md
@@ -312,7 +312,7 @@ deployments:
   owners:
   - moonbitlang/skills
   active_owner: moonbitlang/skills
-  content_hash: sha256:9d4e3fb88a61916552a8f4d27d9e1383c926fd641fde11032e998c4ffd7d09bd
+  content_hash: sha256:968505849ab14eaefc9c449b47da5d11b3049a45969bdedca7e42a0742a81272
 - kind: project-relative
   target: claude
   value: .claude/skills/moonbit-agent-guide/references/moonbit-language-fundamentals.md
@@ -321,7 +321,7 @@ deployments:
   owners:
   - moonbitlang/skills
   active_owner: moonbitlang/skills
-  content_hash: sha256:9d4e3fb88a61916552a8f4d27d9e1383c926fd641fde11032e998c4ffd7d09bd
+  content_hash: sha256:968505849ab14eaefc9c449b47da5d11b3049a45969bdedca7e42a0742a81272
 - kind: project-relative
   target: claude
   value: .claude/skills/moonbit-c-binding
