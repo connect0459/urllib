@@ -2,37 +2,51 @@
 """Generate a sorted-range table of Unicode Mark code points (Mn, Mc, Me)
 for use by the V6 leading-combining-mark check in IDNA validation.
 
-Usage: python3 tools/gen_combining_mark.py
+Usage: python3 tools/gen_combining_mark.py [path/to/DerivedGeneralCategory.txt]
 """
-import unicodedata
+import re
+import sys
 
 
 def output_path() -> str:
     return 'internal/idna/combining_mark.mbt'
 
 
+MARK_CATEGORIES = ('Mn', 'Mc', 'Me')
+
+path = sys.argv[1] if len(sys.argv) > 1 else '/tmp/DerivedGeneralCategory.txt'
+version = None
+marks = []
+with open(path) as f:
+    for line in f:
+        if version is None:
+            m = re.match(r'#\s*DerivedGeneralCategory-(\S+)\.txt', line)
+            if m:
+                version = m.group(1)
+        if '#' in line:
+            line = line[:line.index('#')]
+        line = line.strip()
+        if not line:
+            continue
+        cp_range, category = (x.strip() for x in line.split(';'))
+        if category not in MARK_CATEGORIES:
+            continue
+        lo, _, hi = cp_range.partition('..')
+        marks.append((int(lo, 16), int(hi or lo, 16)))
+if version is None:
+    sys.exit('error: version header not found in ' + path)
+
+marks.sort()
 ranges = []
-start = None
-end = None
-for cp in range(0, 0x110000):
-    try:
-        cat = unicodedata.category(chr(cp))
-    except ValueError:
-        cat = 'Cn'
-    if cat in ('Mn', 'Mc', 'Me'):
-        if start is None:
-            start = cp
-        end = cp
+for s, e in marks:
+    if ranges and s == ranges[-1][1] + 1:
+        ranges[-1] = (ranges[-1][0], e)
     else:
-        if start is not None:
-            ranges.append((start, end))
-            start = None
-if start is not None:
-    ranges.append((start, end))
+        ranges.append((s, e))
 
 with open(output_path(), 'w') as f:
     f.write('// AUTO-GENERATED FILE — do not edit by hand.\n')
-    f.write(f'// Unicode {unicodedata.unidata_version}: Mark (Mn|Mc|Me) ranges.\n')
+    f.write(f'// Source: DerivedGeneralCategory.txt (Unicode {version}): Mark (Mn|Mc|Me) ranges.\n')
     f.write('\n')
     f.write('///|\n')
     f.write('let combining_mark_ranges : Array[(Int, Int)] = [\n')

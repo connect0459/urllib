@@ -4,9 +4,11 @@ setup:
     moon update
     pre-commit install
 
-# Regenerate combining mark table from the system Unicode database
-gen-combining-mark:
-    python3 tools/gen_combining_mark.py
+# Regenerate combining mark table from DerivedGeneralCategory.txt
+# Usage: just gen-combining-mark                         (reads /tmp/DerivedGeneralCategory.txt)
+#        just gen-combining-mark /path/to/DerivedGeneralCategory.txt
+gen-combining-mark input='/tmp/DerivedGeneralCategory.txt':
+    python3 tools/gen_combining_mark.py {{input}}
 
 # Regenerate IDNA mapping tables from IdnaMappingTable.txt
 # Usage: just gen-idna                         (reads /tmp/IdnaMappingTable.txt)
