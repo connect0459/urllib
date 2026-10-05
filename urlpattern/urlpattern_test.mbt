@@ -61,6 +61,22 @@ test "named group :bar captures segment" {
 }
 
 ///|
+test "group name may contain a CJK Unified Ideograph Extension B character" {
+  let p = try! @urlpattern.UrlPattern::from_init(
+    @urlpattern.UrlPatternInit::new(pathname=Some("/:\u{20000}")),
+  )
+  let result = p.exec_init(
+    @urlpattern.UrlPatternInit::new(pathname=Some("/foo")),
+  )
+  guard result is Some(r) else { fail("expected match") }
+  guard r.pathname() is Some(pr) else { fail("expected pathname result") }
+  match pr.groups().get("\u{20000}") {
+    Some(Some(v)) => assert_eq(v, "foo")
+    _ => fail("expected group value 'foo'")
+  }
+}
+
+///|
 test "named group :bar does not match across slash" {
   let p = try! @urlpattern.UrlPattern::from_init(
     @urlpattern.UrlPatternInit::new(pathname=Some("/foo/:bar")),
