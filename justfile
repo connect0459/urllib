@@ -4,6 +4,13 @@ setup:
     moon update
     pre-commit install
 
+# Download the pinned Unicode data used by the gen-* recipes into /tmp
+# Usage: just fetch-unicode-data            (Unicode 18.0.0)
+#        just fetch-unicode-data 18.0.0
+fetch-unicode-data version='18.0.0':
+    curl -fsSL -o /tmp/DerivedGeneralCategory.txt https://www.unicode.org/Public/{{version}}/ucd/extracted/DerivedGeneralCategory.txt
+    curl -fsSL -o /tmp/IdnaMappingTable.txt https://www.unicode.org/Public/{{version}}/idna/IdnaMappingTable.txt
+
 # Regenerate combining mark table from DerivedGeneralCategory.txt
 # Usage: just gen-combining-mark                         (reads /tmp/DerivedGeneralCategory.txt)
 #        just gen-combining-mark /path/to/DerivedGeneralCategory.txt
