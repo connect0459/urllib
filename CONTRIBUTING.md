@@ -9,8 +9,8 @@
 ## Setup
 
 ```sh
-git clone https://github.com/connect0459/urllib-mbt
-cd urllib-mbt
+git clone https://github.com/connect0459/urllib
+cd urllib
 just setup
 ```
 
