@@ -81,3 +81,15 @@ test "domain_to_ascii: invalid ASCII xn-- label is rejected when another label i
     _ => fail("expected IdnaParseError")
   }
 }
+
+///|
+test "is_combining_mark_table: marks assigned after Unicode 16 are recognized" {
+  assert_true(is_combining_mark_table(0x05C8))
+  assert_true(is_combining_mark_table(0x1ACF))
+}
+
+///|
+test "is_combining_mark_table: base letters are not marks" {
+  assert_false(is_combining_mark_table(0x0041))
+  assert_false(is_combining_mark_table(0x05D0))
+}
