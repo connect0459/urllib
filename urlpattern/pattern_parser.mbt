@@ -11,6 +11,12 @@ let unicode_id_supplementary_start : Int = 0x10000
 let unicode_id_supplementary_end : Int = 0x1DFFF
 
 ///|
+let unicode_id_ideograph_start : Int = 0x20000
+
+///|
+let unicode_id_ideograph_end : Int = 0x323AF
+
+///|
 let unicode_variation_selector_start : Int = 0xE0100
 
 ///|
@@ -203,13 +209,19 @@ fn modifier_from_token(t : Token?) -> PartModifier {
 }
 
 ///|
+fn is_supplementary_id_char(cp : Int) -> Bool {
+  (cp >= unicode_id_supplementary_start && cp <= unicode_id_supplementary_end) ||
+  (cp >= unicode_id_ideograph_start && cp <= unicode_id_ideograph_end)
+}
+
+///|
 fn is_valid_id_start(c : Char) -> Bool {
   let cp = c.to_int()
   (c >= 'a' && c <= 'z') ||
   (c >= 'A' && c <= 'Z') ||
   c == '_' ||
   (cp >= unicode_id_non_ascii_start && cp <= unicode_id_bmp_max) ||
-  (cp >= unicode_id_supplementary_start && cp <= unicode_id_supplementary_end)
+  is_supplementary_id_char(cp)
 }
 
 ///|
@@ -220,7 +232,7 @@ fn is_valid_id_continue(c : Char) -> Bool {
   (c >= '0' && c <= '9') ||
   c == '_' ||
   (cp >= unicode_id_non_ascii_start && cp <= unicode_id_bmp_max) ||
-  (cp >= unicode_id_supplementary_start && cp <= unicode_id_supplementary_end) ||
+  is_supplementary_id_char(cp) ||
   (
     cp >= unicode_variation_selector_start &&
     cp <= unicode_variation_selector_end

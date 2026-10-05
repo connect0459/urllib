@@ -33,8 +33,11 @@ STATUS = {
 
 path = sys.argv[1] if len(sys.argv) > 1 else '/tmp/IdnaMappingTable.txt'
 raw = []
+version = None
 with open(path) as f:
     for line in f:
+        if version is None and line.startswith('# Version:'):
+            version = line.split(':', 1)[1].strip()
         if '#' in line:
             line = line[:line.index('#')]
         line = line.strip()
@@ -82,7 +85,7 @@ mapped.sort()
 # Write status table
 with open(status_output_path(), 'w') as f:
     f.write('// AUTO-GENERATED FILE — do not edit by hand.\n')
-    f.write('// Source: IdnaMappingTable.txt (Unicode 16.0.0)\n')
+    f.write(f'// Source: IdnaMappingTable.txt (Unicode {version})\n')
     f.write('// Status codes: 0=valid 1=ignored 2=mapped 3=deviation 4=disallowed 5=disallowed_STD3_valid 6=disallowed_STD3_mapped\n')
     f.write('// Codepoints not listed default to valid (0).\n')
     f.write('// (Unassigned code points are explicitly disallowed by the IdnaMappingTable.)\n\n')
@@ -113,7 +116,7 @@ with open(status_output_path(), 'w') as f:
 # Write mapping table
 with open(mapping_output_path(), 'w') as f:
     f.write('// AUTO-GENERATED FILE — do not edit by hand.\n')
-    f.write('// Source: IdnaMappingTable.txt (Unicode 16.0.0)\n\n')
+    f.write(f'// Source: IdnaMappingTable.txt (Unicode {version})\n\n')
     f.write('///|\n')
     f.write('let idna_mapping_keys : Array[Int] = [\n')
     for cp, _m, _c in mapped:

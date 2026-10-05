@@ -50,3 +50,34 @@ test "domain_to_ascii: empty input raises IdnaParseError" {
   }
   assert_eq(caught, true)
 }
+
+///|
+test "domain_to_ascii: ASCII xn-- label with invalid Punycode is passed through" {
+  assert_eq(domain_to_ascii("xn--a"), "xn--a")
+  assert_eq(domain_to_ascii("xn--ls8h="), "xn--ls8h=")
+  assert_eq(domain_to_ascii("xn--"), "xn--")
+}
+
+///|
+test "domain_to_ascii: ASCII xn-- label whose decoding violates validity rules is passed through" {
+  assert_eq(domain_to_ascii("xn--zn7c.com"), "xn--zn7c.com")
+  assert_eq(domain_to_ascii("xn--1ug.example"), "xn--1ug.example")
+}
+
+///|
+test "domain_to_ascii: non-ASCII label with xn-- prefix is rejected" {
+  try domain_to_ascii("xn--te\u{0161}la") catch {
+    IdnaParseError(_) => ()
+  } noraise {
+    _ => fail("expected IdnaParseError")
+  }
+}
+
+///|
+test "domain_to_ascii: invalid ASCII xn-- label is rejected when another label is non-ASCII" {
+  try domain_to_ascii("xn--a.\u{DF}") catch {
+    IdnaParseError(_) => ()
+  } noraise {
+    _ => fail("expected IdnaParseError")
+  }
+}
