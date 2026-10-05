@@ -1,6 +1,6 @@
 name = "connect0459/urllib"
 
-version = "0.4.5"
+version = "0.5.0"
 
 readme = "README.mbt.md"
 
