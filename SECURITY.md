@@ -15,7 +15,7 @@ Only the latest release on the `main` branch is actively maintained. Older versi
 
 Use GitHub's [private vulnerability reporting][private-report] feature to disclose issues confidentially. You will receive an acknowledgment within **5 business days** and a resolution timeline once the report has been triaged.
 
-[private-report]: https://github.com/connect0459/urllib-mbt/security/advisories/new
+[private-report]: https://github.com/connect0459/urllib/security/advisories/new
 
 ## Scope
 

@@ -1,7 +1,7 @@
-# urllib-mbt
+# urllib
 
-[![CI](https://github.com/connect0459/urllib-mbt/actions/workflows/ci.yml/badge.svg)](https://github.com/connect0459/urllib-mbt/actions/workflows/ci.yml)
-[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://github.com/connect0459/urllib-mbt/blob/main/LICENSE)
+[![CI](https://github.com/connect0459/urllib/actions/workflows/ci.yml/badge.svg)](https://github.com/connect0459/urllib/actions/workflows/ci.yml)
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://github.com/connect0459/urllib/blob/main/LICENSE)
 [![docs](https://img.shields.io/badge/docs-mooncakes.io-green)](https://mooncakes.io/docs/connect0459/urllib)
 
 A WHATWG-compliant URL parsing library for [MoonBit](https://moonbitlang.com).
@@ -120,12 +120,12 @@ Full [Web Platform Tests (WPT)](https://github.com/web-platform-tests/wpt) cover
 
 Each public package has a `README.mbt.md` with a key-types overview, usage examples, and a full API reference. Start with `url` for the main entry point.
 
-- [ARCHITECTURE.md](https://github.com/connect0459/urllib-mbt/blob/main/docs/ARCHITECTURE.md) : Architecture overview
+- [ARCHITECTURE.md](https://github.com/connect0459/urllib/blob/main/docs/ARCHITECTURE.md) : Architecture overview
 
 ## Contributing
 
-See [CONTRIBUTING.md](https://github.com/connect0459/urllib-mbt/blob/main/CONTRIBUTING.md).
+See [CONTRIBUTING.md](https://github.com/connect0459/urllib/blob/main/CONTRIBUTING.md).
 
 ## License
 
-[Apache-2.0](https://github.com/connect0459/urllib-mbt/blob/main/LICENSE)
+[Apache-2.0](https://github.com/connect0459/urllib/blob/main/LICENSE)
