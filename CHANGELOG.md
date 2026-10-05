@@ -22,6 +22,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-10-05
+
+### Changed
+
+#### IDNA
+
+- `url`: pass ASCII `xn--` labels through unchanged when the whole domain is ASCII instead of rejecting them as invalid Punycode, following the updated URL Standard; a domain that also contains non-ASCII labels is still validated (#82)
+- `url`: regenerate the IDNA mapping and status tables from Unicode 18.0.0 (previously 16.0.0), so code points assigned in Unicode 17 and 18 are no longer treated as disallowed, and drop a hand-written forbidden range (U+34000..U+3FFFF) that overrode the generated table (#82)
+- `url`: recognize the 79 combining marks assigned in Unicode 17 and 18 in the leading-combining-mark check (V6), by generating its table from `DerivedGeneralCategory.txt` 18.0.0 instead of the local Python runtime's Unicode database (#83)
+
+### Fixed
+
+- `urlpattern`: accept CJK ideographs beyond U+1DFFF (e.g. U+20000) as group names (#82)
+
+### Miscellaneous
+
+- **repo**: rename repository from `urllib-mbt` to `urllib`, since the library is not a binding of a specific upstream repository (#81)
+- **chore**: update the `wpt` submodule to the latest revision (#82)
+- **test**: keep supplementary-plane characters intact when sanitizing WPT JSON fixtures before parsing (#82)
+- **chore**: add the `just fetch-unicode-data` recipe to download the pinned Unicode data used by the table generators, and derive the Unicode version in generated headers from the source file (#82, #83)
+- **chore**: add `.moonignore` so agent instructions, APM files, local tooling, and the `wpt` submodule are not published to mooncakes, and `.gitattributes` to mark the generated IDNA tables (#84)
+- **chore**: bump the pinned `moonbitlang/skills` revision in `apm.yml` and regenerate `apm.lock.yaml` (#84)
+- **chore**: bump `moonbitlang/x` from 0.4.50 to 0.5.5 (#88)
+- **ci**: add a manually triggered publish dry run that verifies the mooncakes credentials without publishing, and publish only from version tags (#85, #86)
+- **ci**: add Dependabot for GitHub Actions and pre-commit hooks, bump `markdownlint-cli2`, and drop the full-history checkout now that the repository is public (#87)
+- **chore**: ignore the `target` directory in `.gitignore` (#87)
+
 ## [0.4.5] - 2026-09-20
 
 ### Fixed
@@ -211,13 +238,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
-[Unreleased]: <https://github.com/connect0459/urllib-mbt/compare/v0.4.5...HEAD>
-[0.4.5]: <https://github.com/connect0459/urllib-mbt/compare/v0.4.4...v0.4.5>
-[0.4.4]: <https://github.com/connect0459/urllib-mbt/compare/v0.4.3...v0.4.4>
-[0.4.3]: <https://github.com/connect0459/urllib-mbt/compare/v0.4.2...v0.4.3>
-[0.4.2]: <https://github.com/connect0459/urllib-mbt/compare/v0.4.1...v0.4.2>
-[0.4.1]: <https://github.com/connect0459/urllib-mbt/compare/v0.4.0...v0.4.1>
-[0.4.0]: <https://github.com/connect0459/urllib-mbt/compare/v0.3.0...v0.4.0>
-[0.3.0]: <https://github.com/connect0459/urllib-mbt/compare/v0.2.0...v0.3.0>
-[0.2.0]: <https://github.com/connect0459/urllib-mbt/compare/v0.1.0...v0.2.0>
-[0.1.0]: <https://github.com/connect0459/urllib-mbt/releases/tag/v0.1.0>
+[Unreleased]: <https://github.com/connect0459/urllib/compare/v0.5.0...HEAD>
+[0.5.0]: <https://github.com/connect0459/urllib/compare/v0.4.5...v0.5.0>
+[0.4.5]: <https://github.com/connect0459/urllib/compare/v0.4.4...v0.4.5>
+[0.4.4]: <https://github.com/connect0459/urllib/compare/v0.4.3...v0.4.4>
+[0.4.3]: <https://github.com/connect0459/urllib/compare/v0.4.2...v0.4.3>
+[0.4.2]: <https://github.com/connect0459/urllib/compare/v0.4.1...v0.4.2>
+[0.4.1]: <https://github.com/connect0459/urllib/compare/v0.4.0...v0.4.1>
+[0.4.0]: <https://github.com/connect0459/urllib/compare/v0.3.0...v0.4.0>
+[0.3.0]: <https://github.com/connect0459/urllib/compare/v0.2.0...v0.3.0>
+[0.2.0]: <https://github.com/connect0459/urllib/compare/v0.1.0...v0.2.0>
+[0.1.0]: <https://github.com/connect0459/urllib/releases/tag/v0.1.0>
