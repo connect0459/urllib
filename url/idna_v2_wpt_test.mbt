@@ -59,7 +59,7 @@ fn sanitize_unpaired_surrogates(text : String) -> String {
     let c = text.get_char(i).unwrap_or('\u{0}')
     if c != '\\' {
       out.write_char(c)
-      i = i + 1
+      i = i + (if c.to_int() > 0xFFFF { 2 } else { 1 })
       continue
     }
     match unicode_escape_value(text, i) {
@@ -93,6 +93,12 @@ fn sanitize_unpaired_surrogates(text : String) -> String {
     }
   }
   out.to_string()
+}
+
+///|
+test "fixture sanitizer keeps supplementary-plane characters intact" {
+  let text = "[\"a\u{20000}b\"]"
+  assert_eq(sanitize_unpaired_surrogates(text), text)
 }
 
 ///|
