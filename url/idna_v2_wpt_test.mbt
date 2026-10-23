@@ -7,7 +7,7 @@ fn to_repr_idna(s : String?) -> String {
 }
 
 ///|
-fn hex_digit_value(c : Char) -> Int? {
+fn hex_digit_value(c : Char) -> Int32? {
   let n = c.to_int()
   if n >= '0'.to_int() && n <= '9'.to_int() {
     Some(n - '0'.to_int())
@@ -23,7 +23,7 @@ fn hex_digit_value(c : Char) -> Int? {
 ///|
 /// Reads the hex value of a `\uXXXX` escape starting at `at` in `s`, or
 /// `None` if `s[at..]` is not such an escape.
-fn unicode_escape_value(s : String, at : Int) -> Int? {
+fn unicode_escape_value(s : String, at : Int32) -> Int32? {
   if at + 5 >= s.length() {
     return None
   }

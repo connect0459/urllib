@@ -1,26 +1,26 @@
 ///|
-let punycode_base : Int = 36
+let punycode_base : Int32 = 36
 
 ///|
-let punycode_tmin : Int = 1
+let punycode_tmin : Int32 = 1
 
 ///|
-let punycode_tmax : Int = 26
+let punycode_tmax : Int32 = 26
 
 ///|
-let punycode_skew : Int = 38
+let punycode_skew : Int32 = 38
 
 ///|
-let punycode_damp : Int = 700
+let punycode_damp : Int32 = 700
 
 ///|
-let punycode_initial_bias : Int = 72
+let punycode_initial_bias : Int32 = 72
 
 ///|
-let punycode_initial_n : Int = 128
+let punycode_initial_n : Int32 = 128
 
 ///|
-fn punycode_adapt(delta : Int, numpoints : Int, firsttime : Bool) -> Int {
+fn punycode_adapt(delta : Int32, numpoints : Int32, firsttime : Bool) -> Int32 {
   let mut d = if firsttime { delta / punycode_damp } else { delta >> 1 }
   d = d + d / numpoints
   let mut k = 0
@@ -32,7 +32,7 @@ fn punycode_adapt(delta : Int, numpoints : Int, firsttime : Bool) -> Int {
 }
 
 ///|
-fn punycode_digit_value(c : Char) -> Int raise IdnaParseError {
+fn punycode_digit_value(c : Char) -> Int32 raise IdnaParseError {
   if c >= 'a' && c <= 'z' {
     return c.to_int() - 'a'.to_int()
   }
@@ -46,22 +46,22 @@ fn punycode_digit_value(c : Char) -> Int raise IdnaParseError {
 }
 
 ///|
-fn punycode_digit_to_char(d : Int) -> Char {
+fn punycode_digit_to_char(d : Int32) -> Char {
   if d < 26 {
-    Int::unsafe_to_char('a'.to_int() + d)
+    Int32::unsafe_to_char('a'.to_int() + d)
   } else {
-    Int::unsafe_to_char('0'.to_int() + d - 26)
+    Int32::unsafe_to_char('0'.to_int() + d - 26)
   }
 }
 
 ///|
-fn punycode_decode(input : String) -> Array[Int] raise IdnaParseError {
+fn punycode_decode(input : String) -> Array[Int32] raise IdnaParseError {
   let chars = @pe.string_to_chars(input)
   let n_input = chars.length()
   if n_input == 0 {
     raise IdnaParseError("punycode: empty input")
   }
-  let output : Array[Int] = []
+  let output : Array[Int32] = []
   let mut n = punycode_initial_n
   let mut i = 0
   let mut bias = punycode_initial_bias
@@ -122,7 +122,7 @@ fn punycode_decode(input : String) -> Array[Int] raise IdnaParseError {
 }
 
 ///|
-fn punycode_encode(input : Array[Int]) -> String raise IdnaParseError {
+fn punycode_encode(input : Array[Int32]) -> String raise IdnaParseError {
   let total = input.length()
   if total == 0 {
     raise IdnaParseError("punycode: empty input")
@@ -134,7 +134,7 @@ fn punycode_encode(input : Array[Int]) -> String raise IdnaParseError {
   let mut basic_count = 0
   for cp in input {
     if cp < 0x80 {
-      buf.write_char(Int::unsafe_to_char(cp))
+      buf.write_char(Int32::unsafe_to_char(cp))
       basic_count = basic_count + 1
     }
   }

@@ -1,6 +1,6 @@
 ///|
-fn str_to_cps(s : String) -> Array[Int] {
-  let cps : Array[Int] = []
+fn str_to_cps(s : String) -> Array[Int32] {
+  let cps : Array[Int32] = []
   for c in s {
     cps.push(c.to_int())
   }
@@ -8,10 +8,10 @@ fn str_to_cps(s : String) -> Array[Int] {
 }
 
 ///|
-fn cps_to_str(cps : Array[Int]) -> String {
+fn cps_to_str(cps : Array[Int32]) -> String {
   let buf = StringBuilder()
   for cp in cps {
-    buf.write_char(Int::unsafe_to_char(cp))
+    buf.write_char(Int32::unsafe_to_char(cp))
   }
   buf.to_string()
 }

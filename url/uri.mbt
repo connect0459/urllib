@@ -116,7 +116,7 @@ pub fn Url::password(self : Url) -> String {
 
 ///|
 /// Returns the port number, or `None` when absent or equal to the scheme default.
-pub fn Url::port(self : Url) -> Int? {
+pub fn Url::port(self : Url) -> Int32? {
   self.port
 }
 
@@ -320,7 +320,7 @@ pub fn Url::make_relative(self : Url, other : Url) -> String? {
 ///   )
 /// }
 /// ```
-pub fn Url::port_or_known_default(self : Url) -> Int? {
+pub fn Url::port_or_known_default(self : Url) -> Int32? {
   match self.port {
     Some(_) as p => p
     None => special_scheme_default_port(self.scheme)

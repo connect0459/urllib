@@ -19,7 +19,7 @@ pub impl Show for UrlPatternError
 pub struct UrlPattern {
   // private fields
 }
-pub fn UrlPattern::compare_component(UrlPatternComponent, Self, Self) -> Int
+pub fn UrlPattern::compare_component(UrlPatternComponent, Self, Self) -> Int32
 pub fn UrlPattern::exec_init(Self, UrlPatternInit) -> UrlPatternResult?
 pub fn UrlPattern::exec_url(Self, String) -> UrlPatternResult?
 pub fn UrlPattern::from_init(UrlPatternInit, ignore_case? : Bool) -> Self raise UrlPatternError

@@ -1,26 +1,26 @@
 ///|
-let unicode_id_non_ascii_start : Int = 0x80
+let unicode_id_non_ascii_start : Int32 = 0x80
 
 ///|
-let unicode_id_bmp_max : Int = 0xD7FF
+let unicode_id_bmp_max : Int32 = 0xD7FF
 
 ///|
-let unicode_id_supplementary_start : Int = 0x10000
+let unicode_id_supplementary_start : Int32 = 0x10000
 
 ///|
-let unicode_id_supplementary_end : Int = 0x1DFFF
+let unicode_id_supplementary_end : Int32 = 0x1DFFF
 
 ///|
-let unicode_id_ideograph_start : Int = 0x20000
+let unicode_id_ideograph_start : Int32 = 0x20000
 
 ///|
-let unicode_id_ideograph_end : Int = 0x323AF
+let unicode_id_ideograph_end : Int32 = 0x323AF
 
 ///|
-let unicode_variation_selector_start : Int = 0xE0100
+let unicode_variation_selector_start : Int32 = 0xE0100
 
 ///|
-let unicode_variation_selector_end : Int = 0xE01EF
+let unicode_variation_selector_end : Int32 = 0xE01EF
 
 ///|
 priv enum PartType {
@@ -72,11 +72,11 @@ let pathname_options : CompileOptions = {
 ///|
 priv struct ParserCtx {
   tokens : Array[Token]
-  mut i : Int
+  mut i : Int32
   parts : Array[Part]
   mut pending_fixed : String
   mut pending_escaped : Bool
-  mut next_numeric_name : Int
+  mut next_numeric_name : Int32
   options : CompileOptions
 }
 
@@ -209,7 +209,7 @@ fn modifier_from_token(t : Token?) -> PartModifier {
 }
 
 ///|
-fn is_supplementary_id_char(cp : Int) -> Bool {
+fn is_supplementary_id_char(cp : Int32) -> Bool {
   (cp >= unicode_id_supplementary_start && cp <= unicode_id_supplementary_end) ||
   (cp >= unicode_id_ideograph_start && cp <= unicode_id_ideograph_end)
 }

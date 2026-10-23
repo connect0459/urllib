@@ -1,5 +1,5 @@
 ///|
-let max_port : Int = 65535
+let max_port : Int32 = 65535
 
 ///|
 priv enum ComponentKind {
@@ -231,7 +231,7 @@ fn compile_component(
   options : CompileOptions,
   policy : TokenizePolicy,
   kind : ComponentKind,
-  ignore_case? : Bool = false,
+  ignore_case~ : Bool = false,
 ) -> CompiledComponent raise UrlPatternError {
   let raw_parts = parse_pattern_to_parts(pattern, options, policy)
   let parts = encode_parts(raw_parts, kind)
@@ -282,7 +282,7 @@ fn compile_component(
 pub fn UrlPattern::from_string(
   pattern : String,
   base_url : String?,
-  ignore_case? : Bool = false,
+  ignore_case~ : Bool = false,
 ) -> UrlPattern raise UrlPatternError {
   let init = parse_constructor_string(pattern)
   if init.protocol is None && base_url is None {
@@ -304,7 +304,7 @@ pub fn UrlPattern::from_string(
 /// - `ignore_case` : When `true`, all component regexes match case-insensitively.
 pub fn UrlPattern::from_init(
   init : UrlPatternInit,
-  ignore_case? : Bool = false,
+  ignore_case~ : Bool = false,
 ) -> UrlPattern raise UrlPatternError {
   let init = apply_base_url(init, true)
   let proto_raw = init.protocol.unwrap_or("*")
@@ -1023,7 +1023,7 @@ pub fn UrlPattern::generate(
 }
 
 ///|
-fn compare_str_lex(a : String, b : String) -> Int {
+fn compare_str_lex(a : String, b : String) -> Int32 {
   let la = a.length()
   let lb = b.length()
   let n = if la < lb { la } else { lb }
@@ -1080,7 +1080,7 @@ fn merge_fixed_text_parts(parts : Array[Part]) -> Array[Part] {
 }
 
 ///|
-fn compare_pattern_parts(left : Part, right : Part) -> Int {
+fn compare_pattern_parts(left : Part, right : Part) -> Int32 {
   let lkind = effective_part_kind(left)
   let rkind = effective_part_kind(right)
   if lkind == FixedText && rkind == FixedText {
@@ -1149,7 +1149,7 @@ fn compare_pattern_parts(left : Part, right : Part) -> Int {
 }
 
 ///|
-fn compare_pattern_part_lists(left : Array[Part], right : Array[Part]) -> Int {
+fn compare_pattern_part_lists(left : Array[Part], right : Array[Part]) -> Int32 {
   let lm = merge_fixed_text_parts(left)
   let rm = merge_fixed_text_parts(right)
   let n = if lm.length() < rm.length() { lm.length() } else { rm.length() }
@@ -1193,7 +1193,7 @@ pub fn UrlPattern::compare_component(
   component : UrlPatternComponent,
   left : UrlPattern,
   right : UrlPattern,
-) -> Int {
+) -> Int32 {
   let lc = get_urlpattern_component(left, component)
   let rc = get_urlpattern_component(right, component)
   compare_pattern_part_lists(lc.parts, rc.parts)

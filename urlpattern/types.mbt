@@ -21,15 +21,15 @@ pub extend UrlPatternInit with @moonbitlang/core/debug.Debug::{to_repr}
 /// Creates a `UrlPatternInit` with per-component pattern strings; all fields
 /// default to `None` (wildcard) when omitted.
 pub fn UrlPatternInit::new(
-  protocol? : String? = None,
-  username? : String? = None,
-  password? : String? = None,
-  hostname? : String? = None,
-  port? : String? = None,
-  pathname? : String? = None,
-  search? : String? = None,
-  hash? : String? = None,
-  base_url? : String? = None,
+  protocol~ : String? = None,
+  username~ : String? = None,
+  password~ : String? = None,
+  hostname~ : String? = None,
+  port~ : String? = None,
+  pathname~ : String? = None,
+  search~ : String? = None,
+  hash~ : String? = None,
+  base_url~ : String? = None,
 ) -> UrlPatternInit {
   {
     protocol,

@@ -60,8 +60,8 @@ pub fn Url::output(Self, &Logger) -> Unit
 pub fn Url::password(Self) -> String
 pub fn Url::path_segments(Self) -> Iter[String]?
 pub fn Url::pathname(Self) -> String
-pub fn Url::port(Self) -> Int?
-pub fn Url::port_or_known_default(Self) -> Int?
+pub fn Url::port(Self) -> Int32?
+pub fn Url::port_or_known_default(Self) -> Int32?
 pub fn Url::port_str(Self) -> String
 pub fn Url::protocol(Self) -> String
 pub fn Url::query(Self) -> String?
@@ -108,7 +108,7 @@ pub fn UrlSearchParams::keys(Self) -> Iter[String]
 pub fn UrlSearchParams::new() -> Self
 pub fn UrlSearchParams::output(Self, &Logger) -> Unit
 pub fn UrlSearchParams::set(Self, String, String) -> Unit
-pub fn UrlSearchParams::size(Self) -> Int
+pub fn UrlSearchParams::size(Self) -> Int32
 pub fn UrlSearchParams::sort(Self) -> Unit
 pub fn UrlSearchParams::to_string(Self) -> String
 pub fn UrlSearchParams::values(Self) -> Iter[String]

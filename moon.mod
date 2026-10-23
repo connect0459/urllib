@@ -14,5 +14,5 @@ description = "WHATWG-compliant URL and URLPattern library for MoonBit"
 
 import {
   "moonbitlang/x@0.5.5",
-  "moonbitlang/quickcheck@0.14.0",
+  "moonbitlang/quickcheck@0.15.0",
 }

@@ -1,5 +1,5 @@
 ///|
-let max_port : Int = 65535
+let max_port : Int32 = 65535
 
 ///|
 priv enum State {
@@ -36,7 +36,7 @@ fn is_ascii_alphanumeric(c : Char) -> Bool {
 ///|
 fn ascii_lowercase_char(c : Char) -> Char {
   if c >= 'A' && c <= 'Z' {
-    Int::unsafe_to_char(c.to_int() + 32)
+    Int32::unsafe_to_char(c.to_int() + 32)
   } else {
     c
   }
@@ -66,7 +66,7 @@ fn is_windows_drive_letter(s : String) -> Bool {
 }
 
 ///|
-fn chars_start_with_wdl(chars : Array[Char], from : Int, n : Int) -> Bool {
+fn chars_start_with_wdl(chars : Array[Char], from : Int32, n : Int32) -> Bool {
   if from + 1 >= n {
     return false
   }
@@ -128,7 +128,7 @@ fn preprocess_url_input(input : String) -> String {
 }
 
 ///|
-fn is_2e_at(s : String, at : Int) -> Bool {
+fn is_2e_at(s : String, at : Int32) -> Bool {
   if s.get_char(at).unwrap_or('\u{0}') != '%' {
     return false
   }
@@ -606,7 +606,7 @@ pub fn parse_with_base(input : String, base : Url?) -> Url raise UrlParseError {
 fn parse_host_and_port(
   input : String,
   is_special : Bool,
-) -> (Host, Int?) raise UrlParseError {
+) -> (Host, Int32?) raise UrlParseError {
   if input.has_prefix("[") {
     match input.rev_find("]") {
       Some(bracket_pos) => {
@@ -651,7 +651,7 @@ fn parse_host_and_port(
 }
 
 ///|
-fn parse_port_number(s : String) -> Int raise UrlParseError {
+fn parse_port_number(s : String) -> Int32 raise UrlParseError {
   let mut result = 0
   for c in s {
     if c < '0' || c > '9' {

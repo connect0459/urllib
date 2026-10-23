@@ -22,7 +22,7 @@ priv enum TokenizePolicy {
 priv struct Token {
   kind : TokenType
   value : String
-  index : Int
+  index : Int32
 }
 
 ///|

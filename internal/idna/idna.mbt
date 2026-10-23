@@ -1,29 +1,29 @@
 ///|
-let replacement_char : Int = 0xFFFD
+let replacement_char : Int32 = 0xFFFD
 
 ///|
-let nonchar_low_start : Int = 0xFDD0
+let nonchar_low_start : Int32 = 0xFDD0
 
 ///|
-let nonchar_low_end : Int = 0xFDEF
+let nonchar_low_end : Int32 = 0xFDEF
 
 ///|
-let nonchar_plane_sentinel_lower : Int = 0xFFFE
+let nonchar_plane_sentinel_lower : Int32 = 0xFFFE
 
 ///|
-let nonchar_plane_sentinel_upper : Int = 0xFFFF
+let nonchar_plane_sentinel_upper : Int32 = 0xFFFF
 
 ///|
-let no_break_space : Int = 0x00A0
+let no_break_space : Int32 = 0x00A0
 
 ///|
-let ideographic_space : Int = 0x3000
+let ideographic_space : Int32 = 0x3000
 
 ///|
-let surrogate_start : Int = 0xD800
+let surrogate_start : Int32 = 0xD800
 
 ///|
-let surrogate_end : Int = 0xDFFF
+let surrogate_end : Int32 = 0xDFFF
 
 ///|
 pub suberror IdnaParseError {
@@ -31,7 +31,7 @@ pub suberror IdnaParseError {
 }
 
 ///|
-fn is_virama(cp : Int) -> Bool {
+fn is_virama(cp : Int32) -> Bool {
   cp == 0x094D ||
   cp == 0x09CD ||
   cp == 0x0A4D ||
@@ -76,12 +76,12 @@ fn is_virama(cp : Int) -> Bool {
 }
 
 ///|
-fn is_arabic_script(cp : Int) -> Bool {
+fn is_arabic_script(cp : Int32) -> Bool {
   cp >= 0x0600 && cp <= 0x06FF
 }
 
 ///|
-fn is_arabic_right_joining(cp : Int) -> Bool {
+fn is_arabic_right_joining(cp : Int32) -> Bool {
   cp == 0x0622 ||
   cp == 0x0623 ||
   cp == 0x0624 ||
@@ -108,7 +108,7 @@ fn is_arabic_right_joining(cp : Int) -> Bool {
 }
 
 ///|
-fn is_arabic_nonjoining(cp : Int) -> Bool {
+fn is_arabic_nonjoining(cp : Int32) -> Bool {
   (cp >= 0x0610 && cp <= 0x061A) ||
   (cp >= 0x064B && cp <= 0x065F) ||
   cp == 0x0670 ||
@@ -122,7 +122,7 @@ fn is_arabic_nonjoining(cp : Int) -> Bool {
 }
 
 ///|
-fn validate_contextj(cps : Array[Int]) -> Unit raise IdnaParseError {
+fn validate_contextj(cps : Array[Int32]) -> Unit raise IdnaParseError {
   for idx, cp in cps {
     if cp == 0x200D {
       if idx == 0 || !is_virama(cps[idx - 1]) {
@@ -165,7 +165,7 @@ fn validate_contextj(cps : Array[Int]) -> Unit raise IdnaParseError {
 }
 
 ///|
-fn validate_bidi(cps : Array[Int]) -> Unit raise IdnaParseError {
+fn validate_bidi(cps : Array[Int32]) -> Unit raise IdnaParseError {
   let mut has_rtl = false
   let mut has_ltr = false
   for cp in cps {
@@ -193,7 +193,7 @@ fn validate_bidi(cps : Array[Int]) -> Unit raise IdnaParseError {
 }
 
 ///|
-fn hangul_compose(l : Int, v : Int) -> Int {
+fn hangul_compose(l : Int32, v : Int32) -> Int32 {
   let s_base = 0xAC00
   let l_base = 0x1100
   let v_base = 0x1161
@@ -203,7 +203,7 @@ fn hangul_compose(l : Int, v : Int) -> Int {
 }
 
 ///|
-fn try_nfc_compose(a : Int, b : Int) -> Int {
+fn try_nfc_compose(a : Int32, b : Int32) -> Int32 {
   if a >= 0x1100 && a <= 0x1112 && b >= 0x1161 && b <= 0x1175 {
     return hangul_compose(a, b)
   }
@@ -291,11 +291,11 @@ fn try_nfc_compose(a : Int, b : Int) -> Int {
 }
 
 ///|
-fn nfc_compose(cps : Array[Int]) -> Array[Int] {
+fn nfc_compose(cps : Array[Int32]) -> Array[Int32] {
   if cps.length() <= 1 {
     return cps
   }
-  let result : Array[Int] = []
+  let result : Array[Int32] = []
   let mut i = 0
   while i < cps.length() {
     let mut cur = cps[i]
@@ -316,7 +316,7 @@ fn nfc_compose(cps : Array[Int]) -> Array[Int] {
 }
 
 ///|
-fn is_idna_forbidden_cp(cp : Int) -> Bool {
+fn is_idna_forbidden_cp(cp : Int32) -> Bool {
   cp == replacement_char ||
   (cp >= nonchar_low_start && cp <= nonchar_low_end) ||
   (cp & 0xFFFF) == nonchar_plane_sentinel_lower ||
@@ -370,13 +370,13 @@ pub fn domain_to_ascii(domain : String) -> String raise IdnaParseError {
       match idna_mapping_lookup(cp) {
         Some(targets) =>
           for t in targets {
-            buf.write_char(Int::unsafe_to_char(t))
+            buf.write_char(Int32::unsafe_to_char(t))
           }
         None => panic()
       }
       continue
     }
-    buf.write_char(Int::unsafe_to_char(cp))
+    buf.write_char(Int32::unsafe_to_char(cp))
   }
   let mapped = buf.to_string()
   if mapped.is_empty() {
@@ -400,7 +400,7 @@ pub fn domain_to_ascii(domain : String) -> String raise IdnaParseError {
       }
     }
     if has_non_ascii {
-      let cps : Array[Int] = []
+      let cps : Array[Int32] = []
       for c in label {
         cps.push(c.to_int())
       }
@@ -487,7 +487,7 @@ pub fn domain_to_unicode(domain : String) -> String raise IdnaParseError {
       let suffix = label[4:].to_owned()
       let cps = punycode_decode(suffix)
       for cp in cps {
-        out.write_char(Int::unsafe_to_char(cp))
+        out.write_char(Int32::unsafe_to_char(cp))
       }
     } else {
       out.write_string(label)
