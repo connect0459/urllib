@@ -22,6 +22,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-10-23
+
+### Fixed
+
+#### MoonBit toolchain compatibility
+
+- Apply `moon fmt` as enforced by the current toolchain, which now writes `Int` type annotations as `Int32`; the change is spelling only and leaves behavior untouched
+- Bump the `moonbitlang/quickcheck` test dependency from 0.14.0 to 0.15.0, because 0.14.0 still ships `moon.mod.json`, which the current toolchain refuses to resolve
+
 ## [0.5.0] - 2026-10-05
 
 ### Changed
@@ -238,7 +247,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
-[Unreleased]: <https://github.com/connect0459/urllib/compare/v0.5.0...HEAD>
+[Unreleased]: <https://github.com/connect0459/urllib/compare/v0.5.1...HEAD>
+[0.5.1]: <https://github.com/connect0459/urllib/compare/v0.5.0...v0.5.1>
 [0.5.0]: <https://github.com/connect0459/urllib/compare/v0.4.5...v0.5.0>
 [0.4.5]: <https://github.com/connect0459/urllib/compare/v0.4.4...v0.4.5>
 [0.4.4]: <https://github.com/connect0459/urllib/compare/v0.4.3...v0.4.4>
