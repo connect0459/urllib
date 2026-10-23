@@ -1,29 +1,29 @@
 ///|
-let nonchar_low_start : Int = 0xFDD0
+let nonchar_low_start : Int32 = 0xFDD0
 
 ///|
-let nonchar_low_end : Int = 0xFDEF
+let nonchar_low_end : Int32 = 0xFDEF
 
 ///|
-let no_break_space : Int = 0x00A0
+let no_break_space : Int32 = 0x00A0
 
 ///|
-let ideographic_space : Int = 0x3000
+let ideographic_space : Int32 = 0x3000
 
 ///|
-let replacement_char : Int = 0xFFFD
+let replacement_char : Int32 = 0xFFFD
 
 ///|
-let nonchar_plane_sentinel_lower : Int = 0xFFFE
+let nonchar_plane_sentinel_lower : Int32 = 0xFFFE
 
 ///|
-let nonchar_plane_sentinel_upper : Int = 0xFFFF
+let nonchar_plane_sentinel_upper : Int32 = 0xFFFF
 
 ///|
 pub enum Host {
   Domain(String)
-  Ipv4(UInt)
-  Ipv6(Array[UInt])
+  Ipv4(UInt32)
+  Ipv6(Array[UInt32])
   OpaqueHost(String)
 } derive(Eq, Debug)
 
@@ -64,7 +64,7 @@ pub fn serialize_host(host : Host) -> String {
 }
 
 ///|
-fn serialize_ipv4(addr : UInt) -> String {
+fn serialize_ipv4(addr : UInt32) -> String {
   let n1 = (addr >> 24) & 0xFFU
   let n2 = (addr >> 16) & 0xFFU
   let n3 = (addr >> 8) & 0xFFU
@@ -73,16 +73,16 @@ fn serialize_ipv4(addr : UInt) -> String {
 }
 
 ///|
-fn nibble_to_lower_hex(n : Int) -> Char {
+fn nibble_to_lower_hex(n : Int32) -> Char {
   if n < 10 {
-    Int::unsafe_to_char('0'.to_int() + n)
+    Int32::unsafe_to_char('0'.to_int() + n)
   } else {
-    Int::unsafe_to_char('a'.to_int() + n - 10)
+    Int32::unsafe_to_char('a'.to_int() + n - 10)
   }
 }
 
 ///|
-fn uint_to_lower_hex(n : UInt) -> String {
+fn uint_to_lower_hex(n : UInt32) -> String {
   if n == 0U {
     return "0"
   }
@@ -101,10 +101,10 @@ fn uint_to_lower_hex(n : UInt) -> String {
 }
 
 ///|
-fn find_ipv6_compress(pieces : Array[UInt]) -> Int? {
-  let mut best_start : Int? = None
+fn find_ipv6_compress(pieces : Array[UInt32]) -> Int32? {
+  let mut best_start : Int32? = None
   let mut best_len = 1
-  let mut cur_start : Int? = None
+  let mut cur_start : Int32? = None
   let mut cur_len = 0
   for i, piece in pieces {
     if piece == 0U {
@@ -127,7 +127,7 @@ fn find_ipv6_compress(pieces : Array[UInt]) -> Int? {
 }
 
 ///|
-fn serialize_ipv6(pieces : Array[UInt]) -> String {
+fn serialize_ipv6(pieces : Array[UInt32]) -> String {
   let buf = StringBuilder()
   let compress = find_ipv6_compress(pieces)
   let last = pieces.length() - 1
@@ -201,7 +201,7 @@ fn parse_opaque_host(input : String) -> Host raise HostParseError {
 }
 
 ///|
-fn is_forbidden_host_cp(cp : Int) -> Bool {
+fn is_forbidden_host_cp(cp : Int32) -> Bool {
   cp == 0x00 ||
   cp == 0x09 ||
   cp == 0x0A ||
@@ -222,7 +222,7 @@ fn is_forbidden_host_cp(cp : Int) -> Bool {
 }
 
 ///|
-fn is_unicode_nonchar(cp : Int) -> Bool {
+fn is_unicode_nonchar(cp : Int32) -> Bool {
   (cp >= nonchar_low_start && cp <= nonchar_low_end) ||
   (cp & 0xFFFF) == nonchar_plane_sentinel_lower ||
   (cp & 0xFFFF) == nonchar_plane_sentinel_upper
@@ -247,7 +247,7 @@ fn domain_has_forbidden_char(domain : String) -> Bool {
 }
 
 ///|
-fn all_hex_from_str(s : String, from : Int) -> Bool {
+fn all_hex_from_str(s : String, from : Int32) -> Bool {
   let n = s.length()
   let mut i = from
   while i < n {
@@ -298,14 +298,14 @@ fn ends_in_number(input : String) -> Bool {
 }
 
 ///|
-fn parse_ipv4(input : String) -> UInt raise HostParseError {
+fn parse_ipv4(input : String) -> UInt32 raise HostParseError {
   let effective = strip_trailing_dot(input)
   let parts = @pe.split_on_char(effective, '.')
   let n_parts = parts.length()
   if n_parts == 0 || n_parts > 4 {
     raise HostParseError("invalid IPv4: bad number of parts")
   }
-  let numbers : Array[UInt] = []
+  let numbers : Array[UInt32] = []
   for part in parts {
     if part.is_empty() {
       raise HostParseError("invalid IPv4: empty part")
@@ -325,7 +325,7 @@ fn parse_ipv4(input : String) -> UInt raise HostParseError {
       numbers[3]
   }
   let last = numbers[n_parts - 1]
-  let max_last : UInt = if n_parts == 1 {
+  let max_last : UInt32 = if n_parts == 1 {
     0xFFFFFFFFU
   } else if n_parts == 2 {
     0xFFFFFFU
@@ -347,7 +347,7 @@ fn parse_ipv4(input : String) -> UInt raise HostParseError {
 }
 
 ///|
-fn parse_ipv4_number(input : String) -> UInt raise HostParseError {
+fn parse_ipv4_number(input : String) -> UInt32 raise HostParseError {
   let n = input.length()
   let val : UInt64 = if n >= 2 {
     let c0 = input.get_char(0)
@@ -425,12 +425,12 @@ fn parse_octal_u64(input : String) -> UInt64 raise HostParseError {
 }
 
 ///|
-fn parse_ipv6(input : String) -> Array[UInt] raise HostParseError {
-  let pieces : Array[UInt] = [0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U]
+fn parse_ipv6(input : String) -> Array[UInt32] raise HostParseError {
+  let pieces : Array[UInt32] = [0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U]
   let mut piece_index = 0
-  let mut compress : Int? = None
+  let mut compress : Int32? = None
   let n = input.length()
-  let gc = fn(i : Int) -> Char { input.get_char(i).unwrap_or('\u{0}') }
+  let gc = fn(i : Int32) -> Char { input.get_char(i).unwrap_or('\u{0}') }
   let mut pointer = 0
   if pointer < n && gc(pointer) == ':' {
     if pointer + 1 >= n || gc(pointer + 1) != ':' {
@@ -484,7 +484,7 @@ fn parse_ipv6(input : String) -> Array[UInt] raise HostParseError {
         if pointer >= n || gc(pointer) < '0' || gc(pointer) > '9' {
           raise HostParseError("invalid IPv6: expected digit in IPv4")
         }
-        let mut ipv4_val : UInt = 0U
+        let mut ipv4_val : UInt32 = 0U
         let mut first_digit = true
         while pointer < n && gc(pointer) >= '0' && gc(pointer) <= '9' {
           let digit = (gc(pointer).to_int() - '0'.to_int()).reinterpret_as_uint()

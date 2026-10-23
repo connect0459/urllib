@@ -25,11 +25,11 @@ priv struct Csp {
   mut pathname : String?
   mut search : String?
   mut hash : String?
-  mut component_start : Int
-  mut token_index : Int
-  mut token_increment : Int
-  mut group_depth : Int
-  mut hostname_ipv6_bracket_depth : Int
+  mut component_start : Int32
+  mut token_index : Int32
+  mut token_increment : Int32
+  mut group_depth : Int32
+  mut hostname_ipv6_bracket_depth : Int32
   mut protocol_matches_special : Bool
   mut state : CspState
 }
@@ -58,7 +58,7 @@ fn Csp::new(input_chars : Array[Char], token_list : Array[Token]) -> Csp {
 }
 
 ///|
-fn Csp::get_safe_token(self : Csp, index : Int) -> Token {
+fn Csp::get_safe_token(self : Csp, index : Int32) -> Token {
   if index < self.token_list.length() {
     self.token_list[index]
   } else {
@@ -74,7 +74,7 @@ fn str_first_char_eq(s : String, c : Char) -> Bool {
 ///|
 fn Csp::is_non_special_pattern_char(
   self : Csp,
-  index : Int,
+  index : Int32,
   expected : Char,
 ) -> Bool {
   let token = self.get_safe_token(index)
@@ -202,7 +202,7 @@ fn Csp::compute_protocol_matches_special(
 }
 
 ///|
-fn Csp::change_state(self : Csp, new_state : CspState, skip : Int) -> Unit {
+fn Csp::change_state(self : Csp, new_state : CspState, skip : Int32) -> Unit {
   if self.state != CspInit &&
     self.state != CspAuthority &&
     self.state != CspDone {

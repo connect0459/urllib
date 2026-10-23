@@ -62,8 +62,8 @@ fn check_setter_fields(
   new_value : String,
   result : @url.Url,
   expected_fields : Array[(String, String)],
-  passed : Ref[Int],
-  failed : Ref[Int],
+  passed : Ref[Int32],
+  failed : Ref[Int32],
 ) -> Unit {
   for efld in expected_fields {
     let (field, expected_val) = efld

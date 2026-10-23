@@ -1,17 +1,17 @@
 ///|
-let utf16_bmp_max : Int = 0xFFFF
+let utf16_bmp_max : Int32 = 0xFFFF
 
 ///|
-let utf16_supplementary_offset : Int = 0x10000
+let utf16_supplementary_offset : Int32 = 0x10000
 
 ///|
-let utf16_high_surrogate_base : Int = 0xD800
+let utf16_high_surrogate_base : Int32 = 0xD800
 
 ///|
-let utf16_low_surrogate_base : Int = 0xDC00
+let utf16_low_surrogate_base : Int32 = 0xDC00
 
 ///|
-let utf16_surrogate_mask : Int = 0x3FF
+let utf16_surrogate_mask : Int32 = 0x3FF
 
 ///|
 /// A mutable list of name/value string pairs used to encode
@@ -178,7 +178,7 @@ pub fn UrlSearchParams::sort(self : UrlSearchParams) -> Unit {
 
 ///|
 /// Returns the number of name/value pairs.
-pub fn UrlSearchParams::size(self : UrlSearchParams) -> Int {
+pub fn UrlSearchParams::size(self : UrlSearchParams) -> Int32 {
   self.list.length()
 }
 
@@ -300,7 +300,7 @@ fn url_form_decode(s : String) -> String {
     chars.push(c)
   }
   let n = chars.length()
-  let bytes : Array[Int] = []
+  let bytes : Array[Int32] = []
   let mut i = 0
   while i < n {
     let c = chars[i]
@@ -350,7 +350,7 @@ fn url_form_encode(s : String) -> String {
 }
 
 ///|
-fn is_url_form_safe(cp : Int) -> Bool {
+fn is_url_form_safe(cp : Int32) -> Bool {
   (cp >= 0x30 && cp <= 0x39) ||
   (cp >= 0x41 && cp <= 0x5A) ||
   (cp >= 0x61 && cp <= 0x7A) ||
@@ -361,7 +361,7 @@ fn is_url_form_safe(cp : Int) -> Bool {
 }
 
 ///|
-fn char_to_utf16(c : Char) -> Array[Int] {
+fn char_to_utf16(c : Char) -> Array[Int32] {
   let cp = c.to_int()
   if cp <= utf16_bmp_max {
     [cp]
@@ -374,8 +374,8 @@ fn char_to_utf16(c : Char) -> Array[Int] {
 }
 
 ///|
-fn string_to_utf16_units(s : String) -> Array[Int] {
-  let result : Array[Int] = []
+fn string_to_utf16_units(s : String) -> Array[Int32] {
+  let result : Array[Int32] = []
   for c in s {
     for unit in char_to_utf16(c) {
       result.push(unit)
@@ -385,7 +385,7 @@ fn string_to_utf16_units(s : String) -> Array[Int] {
 }
 
 ///|
-fn compare_utf16_units(ua : Array[Int], ub : Array[Int]) -> Int {
+fn compare_utf16_units(ua : Array[Int32], ub : Array[Int32]) -> Int32 {
   let la = ua.length()
   let lb = ub.length()
   let min_len = if la < lb { la } else { lb }

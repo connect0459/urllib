@@ -5,7 +5,7 @@
 // (Unassigned code points are explicitly disallowed by the IdnaMappingTable.)
 
 ///|
-let idna_status_table : Array[(Int, Int, Int)] = [
+let idna_status_table : Array[(Int32, Int32, Int32)] = [
   (65, 90, 2),
   (128, 159, 4),
   (160, 160, 2),
@@ -1639,7 +1639,7 @@ let idna_status_table : Array[(Int, Int, Int)] = [
 ]
 
 ///|
-fn idna_status_code(cp : Int) -> Int {
+fn idna_status_code(cp : Int32) -> Int32 {
   let arr = idna_status_table
   let mut lo = 0
   let mut hi = arr.length()

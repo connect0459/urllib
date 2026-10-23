@@ -33,7 +33,7 @@ fn write_fragment(buf : StringBuilder, fragment : String?) -> Unit {
 }
 
 ///|
-fn write_port(buf : StringBuilder, port : Int?) -> Unit {
+fn write_port(buf : StringBuilder, port : Int32?) -> Unit {
   match port {
     Some(p) => {
       buf.write_char(':')

@@ -1,20 +1,20 @@
 ///|
-let utf8_1byte_max : Int = 0x7F
+let utf8_1byte_max : Int32 = 0x7F
 
 ///|
-let utf8_2byte_max : Int = 0x7FF
+let utf8_2byte_max : Int32 = 0x7FF
 
 ///|
-let utf8_3byte_max : Int = 0xFFFF
+let utf8_3byte_max : Int32 = 0xFFFF
 
 ///|
-let surrogate_start : Int = 0xD800
+let surrogate_start : Int32 = 0xD800
 
 ///|
-let surrogate_end : Int = 0xDFFF
+let surrogate_end : Int32 = 0xDFFF
 
 ///|
-let replacement_char : Int = 0xFFFD
+let replacement_char : Int32 = 0xFFFD
 
 ///|
 pub fn strip_leading_char(s : String, c : Char) -> String {
@@ -50,27 +50,27 @@ pub fn split_on_char(s : String, sep : Char) -> Array[String] {
 }
 
 ///|
-fn is_c0(cp : Int) -> Bool {
+fn is_c0(cp : Int32) -> Bool {
   cp <= 0x1F || cp > 0x7E
 }
 
 ///|
-fn in_fragment_set(cp : Int) -> Bool {
+fn in_fragment_set(cp : Int32) -> Bool {
   is_c0(cp) || cp == ' ' || cp == '"' || cp == '<' || cp == '>' || cp == '`'
 }
 
 ///|
-fn in_query_set(cp : Int) -> Bool {
+fn in_query_set(cp : Int32) -> Bool {
   is_c0(cp) || cp == ' ' || cp == '"' || cp == '#' || cp == '<' || cp == '>'
 }
 
 ///|
-fn in_special_query_set(cp : Int) -> Bool {
+fn in_special_query_set(cp : Int32) -> Bool {
   in_query_set(cp) || cp == '\''
 }
 
 ///|
-fn in_path_set(cp : Int) -> Bool {
+fn in_path_set(cp : Int32) -> Bool {
   in_query_set(cp) ||
   cp == '?' ||
   cp == '^' ||
@@ -80,7 +80,7 @@ fn in_path_set(cp : Int) -> Bool {
 }
 
 ///|
-fn in_userinfo_set(cp : Int) -> Bool {
+fn in_userinfo_set(cp : Int32) -> Bool {
   in_path_set(cp) ||
   cp == '/' ||
   cp == ':' ||
@@ -92,18 +92,18 @@ fn in_userinfo_set(cp : Int) -> Bool {
 }
 
 ///|
-fn to_hex_upper(n : Int) -> Char {
+fn to_hex_upper(n : Int32) -> Char {
   if n < 10 {
-    Int::unsafe_to_char('0'.to_int() + n)
+    Int32::unsafe_to_char('0'.to_int() + n)
   } else {
-    Int::unsafe_to_char('A'.to_int() + n - 10)
+    Int32::unsafe_to_char('A'.to_int() + n - 10)
   }
 }
 
 ///|
 /// Returns the percent-encoded representation of a single byte
 /// (e.g. `0x20` → `"%20"`).
-pub fn percent_encode_byte(byte : Int) -> String {
+pub fn percent_encode_byte(byte : Int32) -> String {
   let hi = (byte >> 4) & 0xF
   let lo = byte & 0xF
   let buf = StringBuilder(size_hint=3)
@@ -117,14 +117,14 @@ pub fn percent_encode_byte(byte : Int) -> String {
 /// Encodes a Unicode character to its UTF-8 byte sequence as an array of integers.
 /// Lone surrogate code points (U+D800–U+DFFF) are replaced with U+FFFD to
 /// match the WHATWG "UTF-8 encode" algorithm applied to USVStrings.
-pub fn char_to_utf8_bytes(c : Char) -> Array[Int] {
+pub fn char_to_utf8_bytes(c : Char) -> Array[Int32] {
   let raw_cp = c.to_int()
   let cp = if raw_cp >= surrogate_start && raw_cp <= surrogate_end {
     replacement_char
   } else {
     raw_cp
   }
-  let result : Array[Int] = []
+  let result : Array[Int32] = []
   if cp <= utf8_1byte_max {
     result.push(cp)
   } else if cp <= utf8_2byte_max {
@@ -144,7 +144,7 @@ pub fn char_to_utf8_bytes(c : Char) -> Array[Int] {
 }
 
 ///|
-fn push_utf8_bytes(c : Char, bytes : Array[Int]) -> Unit {
+fn push_utf8_bytes(c : Char, bytes : Array[Int32]) -> Unit {
   let raw_cp = c.to_int()
   let cp = if raw_cp >= surrogate_start && raw_cp <= surrogate_end {
     replacement_char
@@ -169,7 +169,7 @@ fn push_utf8_bytes(c : Char, bytes : Array[Int]) -> Unit {
 }
 
 ///|
-fn write_percent_encoded_byte(byte : Int, buf : StringBuilder) -> Unit {
+fn write_percent_encoded_byte(byte : Int32, buf : StringBuilder) -> Unit {
   let hi = (byte >> 4) & 0xF
   let lo = byte & 0xF
   buf.write_char('%')
@@ -203,7 +203,7 @@ fn write_percent_encoded_char(c : Char, buf : StringBuilder) -> Unit {
 }
 
 ///|
-fn percent_encode(input : String, in_encode_set : (Int) -> Bool) -> String {
+fn percent_encode(input : String, in_encode_set : (Int32) -> Bool) -> String {
   let buf = StringBuilder()
   for c in input {
     let cp = c.to_int()
@@ -277,7 +277,7 @@ pub fn percent_encode_opaque_path_at_stop(input : String) -> String {
 ///|
 /// Returns the numeric value of an ASCII hex digit (`0`–`9`, `a`–`f`, `A`–`F`),
 /// or `None` for any other character.
-pub fn hex_digit_value(c : Char) -> Int? {
+pub fn hex_digit_value(c : Char) -> Int32? {
   if c >= '0' && c <= '9' {
     Some(c.to_int() - '0'.to_int())
   } else if c >= 'A' && c <= 'F' {
@@ -308,7 +308,7 @@ pub fn hex_digit_value(c : Char) -> Int? {
 /// }
 /// ```
 pub fn percent_decode(input : String) -> String {
-  let bytes : Array[Int] = []
+  let bytes : Array[Int32] = []
   let n = input.length()
   let mut i = 0
   while i < n {
@@ -335,14 +335,14 @@ pub fn percent_decode(input : String) -> String {
 }
 
 ///|
-fn is_continuation(b : Int) -> Bool {
+fn is_continuation(b : Int32) -> Bool {
   (b & 0xC0) == 0x80
 }
 
 ///|
 /// Decodes a UTF-8 byte sequence to a `String`, replacing any invalid byte
 /// sequences with U+FFFD (replacement character).
-pub fn utf8_bytes_to_string(bytes : Array[Int]) -> String {
+pub fn utf8_bytes_to_string(bytes : Array[Int32]) -> String {
   let buf = StringBuilder()
   let n = bytes.length()
   let mut i = 0
@@ -373,7 +373,7 @@ pub fn utf8_bytes_to_string(bytes : Array[Int]) -> String {
     } else {
       (replacement_char, 1)
     }
-    buf.write_char(Int::unsafe_to_char(cp))
+    buf.write_char(Int32::unsafe_to_char(cp))
     i = i + advance
   }
   buf.to_string()

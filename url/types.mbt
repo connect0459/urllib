@@ -45,7 +45,7 @@ pub struct Url {
   priv username : String
   priv password : String
   priv host : Host?
-  priv port : Int?
+  priv port : Int32?
   priv path : UrlPath
   priv query : String?
   priv fragment : String?
@@ -63,7 +63,7 @@ priv struct UrlRecord {
   mut username : String
   mut password : String
   mut host : Host?
-  mut port : Int?
+  mut port : Int32?
   mut path : UrlPath
   mut query : String?
   mut fragment : String?
@@ -148,7 +148,7 @@ fn is_special_scheme(scheme : String) -> Bool {
 }
 
 ///|
-fn special_scheme_default_port(scheme : String) -> Int? {
+fn special_scheme_default_port(scheme : String) -> Int32? {
   match scheme {
     "ftp" => Some(21)
     "http" | "ws" => Some(80)

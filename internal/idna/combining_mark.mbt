@@ -2,7 +2,7 @@
 // Source: DerivedGeneralCategory.txt (Unicode 18.0.0): Mark (Mn|Mc|Me) ranges.
 
 ///|
-let combining_mark_ranges : Array[(Int, Int)] = [
+let combining_mark_ranges : Array[(Int32, Int32)] = [
   (768, 879),
   (1155, 1161),
   (1425, 1469),
@@ -339,7 +339,7 @@ let combining_mark_ranges : Array[(Int, Int)] = [
 ]
 
 ///|
-fn is_combining_mark_table(cp : Int) -> Bool {
+fn is_combining_mark_table(cp : Int32) -> Bool {
   let arr = combining_mark_ranges
   let mut lo = 0
   let mut hi = arr.length()

@@ -2,7 +2,7 @@
 // Source: IdnaMappingTable.txt (Unicode 18.0.0)
 
 ///|
-let idna_mapping_keys : Array[Int] = [
+let idna_mapping_keys : Array[Int32] = [
   65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84,
   85, 86, 87, 88, 89, 90, 160, 168, 170, 175, 178, 179, 180, 181, 184, 185, 186,
   188, 189, 190, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204,
@@ -560,7 +560,7 @@ let idna_mapping_keys : Array[Int] = [
 ]
 
 ///|
-let idna_mapping_values : Array[Array[Int]] = [
+let idna_mapping_values : Array[Array[Int32]] = [
   [97],
   [98],
   [99],
@@ -7036,7 +7036,7 @@ let idna_mapping_values : Array[Array[Int]] = [
 ]
 
 ///|
-fn idna_mapping_lookup(cp : Int) -> Array[Int]? {
+fn idna_mapping_lookup(cp : Int32) -> Array[Int32]? {
   let keys = idna_mapping_keys
   let mut lo = 0
   let mut hi = keys.length()

@@ -32,30 +32,30 @@ test "percent_encode_c0: emoji is encoded as four-byte UTF-8 sequence" {
 
 ///|
 test "percent_encode_c0: lone high surrogate is replaced with U+FFFD" {
-  let s = String::from_array([Int::unsafe_to_char(0xD83D)])
+  let s = String::from_array([Int32::unsafe_to_char(0xD83D)])
   assert_eq(percent_encode_c0(s), "%EF%BF%BD")
 }
 
 ///|
 test "percent_encode_c0: lone low surrogate is replaced with U+FFFD" {
-  let s = String::from_array([Int::unsafe_to_char(0xDEB2)])
+  let s = String::from_array([Int32::unsafe_to_char(0xDEB2)])
   assert_eq(percent_encode_c0(s), "%EF%BF%BD")
 }
 
 ///|
 test "percent_encode_path_seg: lone surrogates split by space yield two U+FFFD" {
   let s = String::from_array([
-    Int::unsafe_to_char(0xD83D),
-    Int::unsafe_to_char(0x20),
-    Int::unsafe_to_char(0xDEB2),
+    Int32::unsafe_to_char(0xD83D),
+    Int32::unsafe_to_char(0x20),
+    Int32::unsafe_to_char(0xDEB2),
   ])
   assert_eq(percent_encode_path_seg(s), "%EF%BF%BD%20%EF%BF%BD")
 }
 
 ///|
 test "char_to_utf8_bytes: lone surrogate produces U+FFFD bytes" {
-  let hi = char_to_utf8_bytes(Int::unsafe_to_char(0xD83D))
-  let lo = char_to_utf8_bytes(Int::unsafe_to_char(0xDEB2))
+  let hi = char_to_utf8_bytes(Int32::unsafe_to_char(0xD83D))
+  let lo = char_to_utf8_bytes(Int32::unsafe_to_char(0xDEB2))
   let expected = [0xEF, 0xBF, 0xBD]
   assert_true(hi.length() == expected.length())
   assert_true(lo.length() == expected.length())

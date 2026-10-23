@@ -2,13 +2,13 @@
 package "connect0459/urllib/internal/percent_encoding"
 
 // Values
-pub fn char_to_utf8_bytes(Char) -> Array[Int]
+pub fn char_to_utf8_bytes(Char) -> Array[Int32]
 
-pub fn hex_digit_value(Char) -> Int?
+pub fn hex_digit_value(Char) -> Int32?
 
 pub fn percent_decode(String) -> String
 
-pub fn percent_encode_byte(Int) -> String
+pub fn percent_encode_byte(Int32) -> String
 
 pub fn percent_encode_c0(String) -> String
 
@@ -28,7 +28,7 @@ pub fn string_to_chars(String) -> Array[Char]
 
 pub fn strip_leading_char(String, Char) -> String
 
-pub fn utf8_bytes_to_string(Array[Int]) -> String
+pub fn utf8_bytes_to_string(Array[Int32]) -> String
 
 // Errors
 

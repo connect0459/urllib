@@ -171,9 +171,9 @@ test "custom regexp group (.*) captures greedily" {
 ///|
 test "lone surrogates in pathname pattern encode as U+FFFD" {
   let s = String::from_array([
-    Int::unsafe_to_char(0xD83D),
-    Int::unsafe_to_char(0x20),
-    Int::unsafe_to_char(0xDEB2),
+    Int32::unsafe_to_char(0xD83D),
+    Int32::unsafe_to_char(0x20),
+    Int32::unsafe_to_char(0xDEB2),
   ])
   let p = try! @urlpattern.UrlPattern::from_init(
     @urlpattern.UrlPatternInit::new(pathname=Some(s)),

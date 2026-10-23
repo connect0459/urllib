@@ -68,7 +68,7 @@ fn Url::can_have_credentials(self : Url) -> Bool {
 ///|
 priv enum SetterPort {
   Unchanged
-  Changed(Int?)
+  Changed(Int32?)
 }
 
 ///|
