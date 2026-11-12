@@ -105,6 +105,8 @@ test {
 ///|
 test {
   assert_eq(@url.domain_to_ascii("münchen.example"), "xn--mnchen-3ya.example")
+  assert_eq(@url.domain_to_ascii("a_b.example"), "a_b.example")
+  assert_eq(@url.domain_to_ascii("a_b.example", strict=true), "")
   assert_eq(
     @url.domain_to_unicode("xn--mnchen-3ya.example"),
     "münchen.example",

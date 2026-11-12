@@ -154,3 +154,53 @@ test "WPT IdnaTestV2: domain-to-ascii cases" {
   println("WPT IdnaTestV2: \{passed}/\{total} passed")
   assert_eq(failures.length(), 0)
 }
+
+///|
+test "WPT IdnaTestV2: strict domain_to_ascii agrees with the standard on every name it accepts" {
+  let content = @fs.read_file_to_string("wpt/url/resources/IdnaTestV2.json")
+  let json = @json.parse(sanitize_unpaired_surrogates(content))
+  let items = match json {
+    Array(a) => a
+    _ => fail("expected JSON array")
+  }
+  let failures : Array[String] = []
+  let mut accepted = 0
+  for item in items {
+    match item {
+      Object(obj) => {
+        let input = match obj.get("input") {
+          Some(String(s)) => s
+          _ => fail("missing or non-string 'input' field")
+        }
+        if input == "" {
+          continue
+        }
+        let expected : String? = match obj.get("output") {
+          Some(String(s)) => Some(s)
+          Some(Null) => None
+          _ => fail("unexpected 'output' field type")
+        }
+        let actual = @url.domain_to_ascii(input, strict=true)
+        if actual == "" {
+          continue
+        }
+        accepted += 1
+        if Some(actual) != expected {
+          failures.push(
+            "FAIL: input=\{input}\n  expected=\{to_repr_idna(expected)}\n  actual=\{actual}",
+          )
+        }
+      }
+      _ => ()
+    }
+  }
+  let n = if failures.length() < 10 { failures.length() } else { 10 }
+  for i in 0..<n {
+    println(failures[i])
+  }
+  println(
+    "WPT IdnaTestV2 strict: \{accepted - failures.length()}/\{accepted} accepted names agree",
+  )
+  assert_true(accepted > 0)
+  assert_eq(failures.length(), 0)
+}

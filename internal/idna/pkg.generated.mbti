@@ -2,7 +2,7 @@
 package "connect0459/urllib/internal/idna"
 
 // Values
-pub fn domain_to_ascii(String) -> String raise IdnaParseError
+pub fn domain_to_ascii(String, strict? : Bool) -> String raise IdnaParseError
 
 pub fn domain_to_unicode(String) -> String raise IdnaParseError
 

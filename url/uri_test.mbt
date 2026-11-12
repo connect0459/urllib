@@ -420,6 +420,133 @@ test "domain_to_ascii: empty input returns empty string" {
   assert_eq(@url.domain_to_ascii(""), "")
 }
 
+///|
+test "domain_to_ascii strict: label with a leading hyphen is rejected" {
+  assert_eq(@url.domain_to_ascii("-a.com", strict=true), "")
+  assert_eq(@url.domain_to_ascii("-a.com"), "-a.com")
+}
+
+///|
+test "domain_to_ascii strict: label with a trailing hyphen is rejected" {
+  assert_eq(@url.domain_to_ascii("a-.com", strict=true), "")
+  assert_eq(@url.domain_to_ascii("a-.com"), "a-.com")
+}
+
+///|
+test "domain_to_ascii strict: hyphens in the third and fourth positions are rejected" {
+  assert_eq(@url.domain_to_ascii("ab--c.com", strict=true), "")
+  assert_eq(@url.domain_to_ascii("ab--c.com"), "ab--c.com")
+}
+
+///|
+test "domain_to_ascii strict: inner hyphen is accepted" {
+  assert_eq(@url.domain_to_ascii("a-b.com", strict=true), "a-b.com")
+}
+
+///|
+test "domain_to_ascii strict: label over 63 octets is rejected" {
+  let label64 = "a".repeat(64)
+  assert_eq(@url.domain_to_ascii(label64 + ".com", strict=true), "")
+  assert_eq(@url.domain_to_ascii(label64 + ".com"), label64 + ".com")
+}
+
+///|
+test "domain_to_ascii strict: label of exactly 63 octets is accepted" {
+  let label63 = "a".repeat(63)
+  assert_eq(
+    @url.domain_to_ascii(label63 + ".com", strict=true),
+    label63 + ".com",
+  )
+}
+
+///|
+test "domain_to_ascii strict: Punycode output over 63 octets is rejected" {
+  let name = "é".repeat(60) + ".com"
+  assert_eq(@url.domain_to_ascii(name, strict=true), "")
+  assert_true(@url.domain_to_ascii(name) != "")
+}
+
+///|
+test "domain_to_ascii strict: name over 253 octets is rejected" {
+  let l63 = "a".repeat(63)
+  let at_limit = l63 + "." + l63 + "." + l63 + "." + "a".repeat(61)
+  let over_limit = l63 + "." + l63 + "." + l63 + "." + "a".repeat(62)
+  assert_eq(@url.domain_to_ascii(at_limit, strict=true), at_limit)
+  assert_eq(@url.domain_to_ascii(over_limit, strict=true), "")
+  assert_eq(@url.domain_to_ascii(over_limit), over_limit)
+}
+
+///|
+test "domain_to_ascii strict: empty label is rejected" {
+  assert_eq(@url.domain_to_ascii("a..com", strict=true), "")
+  assert_eq(@url.domain_to_ascii(".com", strict=true), "")
+  assert_eq(@url.domain_to_ascii("a..com"), "a..com")
+}
+
+///|
+test "domain_to_ascii strict: trailing root dot is accepted" {
+  assert_eq(@url.domain_to_ascii("example.com.", strict=true), "example.com.")
+}
+
+///|
+test "domain_to_ascii strict: 253 octets followed by a root dot is accepted" {
+  let l63 = "a".repeat(63)
+  let name = l63 + "." + l63 + "." + l63 + "." + "a".repeat(61) + "."
+  assert_eq(@url.domain_to_ascii(name, strict=true), name)
+}
+
+///|
+test "domain_to_ascii strict: two trailing dots are rejected" {
+  assert_eq(@url.domain_to_ascii("example.com..", strict=true), "")
+  assert_eq(@url.domain_to_ascii("example.com.."), "example.com..")
+}
+
+///|
+test "domain_to_ascii strict: a lone root dot is rejected" {
+  assert_eq(@url.domain_to_ascii(".", strict=true), "")
+  assert_eq(@url.domain_to_ascii("."), ".")
+}
+
+///|
+test "domain_to_ascii strict: non-LDH ASCII character is rejected" {
+  assert_eq(@url.domain_to_ascii("a_b.com", strict=true), "")
+  assert_eq(@url.domain_to_ascii("a_b.com"), "a_b.com")
+}
+
+///|
+test "domain_to_ascii strict: non-LDH character produced by mapping is rejected" {
+  assert_eq(@url.domain_to_ascii("a\u{FF3F}b.com", strict=true), "")
+}
+
+///|
+test "domain_to_ascii strict: invalid Punycode label is rejected" {
+  assert_eq(@url.domain_to_ascii("xn--a.com", strict=true), "")
+  assert_eq(@url.domain_to_ascii("xn--a.com"), "xn--a.com")
+}
+
+///|
+test "domain_to_ascii strict: name valid in both modes gives the same result" {
+  assert_eq(
+    @url.domain_to_ascii("EXAMPLE.com", strict=true),
+    @url.domain_to_ascii("EXAMPLE.com"),
+  )
+  assert_eq(
+    @url.domain_to_ascii("münchen.example", strict=true),
+    "xn--mnchen-3ya.example",
+  )
+  assert_eq(@url.domain_to_ascii("xn--zca.com", strict=true), "xn--zca.com")
+}
+
+///|
+test "domain_to_ascii strict: explicit false behaves like the default" {
+  assert_eq(@url.domain_to_ascii("a_b.com", strict=false), "a_b.com")
+}
+
+///|
+test "domain_to_ascii strict: empty input returns empty string" {
+  assert_eq(@url.domain_to_ascii("", strict=true), "")
+}
+
 // ===== domain_to_unicode =====
 
 ///|
