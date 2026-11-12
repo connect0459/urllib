@@ -781,7 +781,8 @@ fn apply_base_url(
 
 ///|
 /// Tests a URL string against this pattern and returns match details,
-/// or `None` when the URL does not parse or does not match.
+/// or `None` when the URL or the optional `base_url` does not parse, or
+/// the URL does not match. A relative URL is resolved against `base_url`.
 ///
 /// ### Example
 ///
@@ -801,8 +802,20 @@ fn apply_base_url(
 pub fn UrlPattern::exec_url(
   self : UrlPattern,
   url_str : String,
+  base_url? : String,
 ) -> UrlPatternResult? {
-  let url = @url.parse(url_str) catch { _ => return None }
+  let base = match base_url {
+    None => None
+    Some(b) =>
+      match @url.parse_maybe(b, None) {
+        None => return None
+        parsed => parsed
+      }
+  }
+  let url = match @url.parse_maybe(url_str, base) {
+    None => return None
+    Some(u) => u
+  }
   let scheme = url.scheme()
   let search_raw = url.search()
   let hash_raw = url.hash()
@@ -821,7 +834,10 @@ pub fn UrlPattern::exec_url(
     None => None
     Some(r) =>
       Some({
-        inputs: [Str(url_str)],
+        inputs: match base_url {
+          None => [Str(url_str)]
+          Some(b) => [Str(url_str), Str(b)]
+        },
         protocol: r.protocol,
         username: r.username,
         password: r.password,
@@ -841,9 +857,14 @@ pub fn UrlPattern::test_init(self : UrlPattern, init : UrlPatternInit) -> Bool {
 }
 
 ///|
-/// Returns `true` if the URL string matches this pattern.
-pub fn UrlPattern::test_url(self : UrlPattern, url : String) -> Bool {
-  self.exec_url(url) is Some(_)
+/// Returns `true` if the URL string, resolved against the optional `base_url`,
+/// matches this pattern.
+pub fn UrlPattern::test_url(
+  self : UrlPattern,
+  url : String,
+  base_url? : String,
+) -> Bool {
+  self.exec_url(url, base_url?) is Some(_)
 }
 
 ///|

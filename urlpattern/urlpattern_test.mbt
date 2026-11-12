@@ -364,3 +364,87 @@ test "test_init returns false for non-matching UrlPatternInit" {
     false,
   )
 }
+
+///|
+test "exec_url resolves a relative URL against the base URL" {
+  let p = try! @urlpattern.UrlPattern::from_string(
+    "https://example.com/users/:id",
+    None,
+  )
+  let result = p.exec_url("/users/42", base_url="https://example.com/")
+  guard result is Some(r) else { fail("expected match") }
+  guard r.pathname() is Some(pr) else { fail("expected pathname result") }
+  assert_eq(pr.groups()["id"], Some("42"))
+}
+
+///|
+test "exec_url records both the URL and the base URL as inputs" {
+  let p = try! @urlpattern.UrlPattern::from_string(
+    "https://example.com/users/:id",
+    None,
+  )
+  let result = p.exec_url("/users/42", base_url="https://example.com/")
+  guard result is Some(r) else { fail("expected match") }
+  assert_eq(r.inputs().length(), 2)
+}
+
+///|
+test "exec_url returns None when the base URL is invalid" {
+  let p = try! @urlpattern.UrlPattern::from_string(
+    "https://example.com/users/:id",
+    None,
+  )
+  assert_true(p.exec_url("/users/42", base_url="not a url") is None)
+}
+
+///|
+test "exec_url ignores an absent base URL" {
+  let p = try! @urlpattern.UrlPattern::from_string(
+    "https://example.com/users/:id",
+    None,
+  )
+  assert_true(p.exec_url("https://example.com/users/42") is Some(_))
+}
+
+///|
+test "test_url resolves a relative URL against the base URL" {
+  let p = try! @urlpattern.UrlPattern::from_string(
+    "https://example.com/users/:id",
+    None,
+  )
+  assert_true(p.test_url("/users/42", base_url="https://example.com/"))
+  assert_false(p.test_url("/users/42", base_url="https://other.com/"))
+}
+
+///|
+test "test_url returns false when the base URL is invalid" {
+  let p = try! @urlpattern.UrlPattern::from_string(
+    "https://example.com/users/:id",
+    None,
+  )
+  assert_false(p.test_url("/users/42", base_url="not a url"))
+}
+
+///|
+test "exec_url returns None for an absolute URL when the base URL is invalid" {
+  let p = try! @urlpattern.UrlPattern::from_string(
+    "https://example.com/users/:id",
+    None,
+  )
+  assert_true(
+    p.exec_url("https://example.com/users/42", base_url="not a url") is None,
+  )
+  assert_false(p.test_url("https://example.com/users/42", base_url="not a url"))
+}
+
+///|
+test "exec_url records only the URL as input when no base URL is given" {
+  let p = try! @urlpattern.UrlPattern::from_string(
+    "https://example.com/users/:id",
+    None,
+  )
+  guard p.exec_url("https://example.com/users/42") is Some(r) else {
+    fail("expected match")
+  }
+  assert_eq(r.inputs().length(), 1)
+}
