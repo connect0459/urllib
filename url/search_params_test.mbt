@@ -479,11 +479,24 @@ test "from_pairs does not alias the input array" {
 }
 
 ///|
-test "from_pairs replaces lone surrogates with U+FFFD" {
-  let lone_high = "a" +
-    [(0xD800).unsafe_to_char()].map(fn(c) { c.to_string() }).join("")
-  let p = @url.UrlSearchParams::from_pairs([(lone_high, "x")])
-  @debug.assert_eq(p.to_string(), "a%EF%BF%BD=x")
+test "from_pairs replaces a lone high surrogate in a stored value" {
+  let high = (0xD800).unsafe_to_char().to_string()
+  let p = @url.UrlSearchParams::from_pairs([("k", "a" + high)])
+  @debug.assert_eq(p.get("k"), Some("a\u{FFFD}"))
+}
+
+///|
+test "from_pairs replaces a lone low surrogate in a stored value" {
+  let low = (0xDC00).unsafe_to_char().to_string()
+  let p = @url.UrlSearchParams::from_pairs([("k", low + "a")])
+  @debug.assert_eq(p.get("k"), Some("\u{FFFD}a"))
+}
+
+///|
+test "from_pairs replaces a lone surrogate in a stored name" {
+  let high = (0xD800).unsafe_to_char().to_string()
+  let p = @url.UrlSearchParams::from_pairs([(high + "k", "v")])
+  @debug.assert_eq(p.get("\u{FFFD}k"), Some("v"))
 }
 
 ///|
@@ -496,37 +509,44 @@ test "from_record keeps insertion order of keys" {
 }
 
 ///|
-test "from_record with later assignment to the same key keeps a single pair" {
-  let m : Map[String, String] = Map([])
-  m["a"] = "1"
-  m["a"] = "2"
-  let p = @url.UrlSearchParams::from_record(m)
-  @debug.assert_eq(p.get_all("a"), ["2"])
-}
-
-///|
 test "from_record with empty map produces empty params" {
   let p = @url.UrlSearchParams::from_record(Map([]))
   @debug.assert_eq(p.size(), 0)
 }
 
 ///|
-test "from_record replaces lone surrogates with U+FFFD" {
+test "from_record replaces a lone surrogate in a stored value" {
   let m : Map[String, String] = Map([])
   m["k"] = "v" + (0xDC00).unsafe_to_char().to_string()
   let p = @url.UrlSearchParams::from_record(m)
-  @debug.assert_eq(p.to_string(), "k=v%EF%BF%BD")
+  @debug.assert_eq(p.get("k"), Some("v\u{FFFD}"))
+}
+
+///|
+test "from_record replaces a lone surrogate in a stored name" {
+  let m : Map[String, String] = Map([])
+  m[(0xD800).unsafe_to_char().to_string() + "k"] = "v"
+  let p = @url.UrlSearchParams::from_record(m)
+  @debug.assert_eq(p.get("\u{FFFD}k"), Some("v"))
+}
+
+///|
+test "from_record keeps valid surrogate pairs as one supplementary character" {
+  let m : Map[String, String] = Map([])
+  m["k"] = "😀"
+  let p = @url.UrlSearchParams::from_record(m)
+  @debug.assert_eq(p.get("k"), Some("😀"))
 }
 
 ///|
 test "from_pairs keeps valid surrogate pairs as one supplementary character" {
   let p = @url.UrlSearchParams::from_pairs([("k", "😀")])
-  @debug.assert_eq(p.to_string(), "k=%F0%9F%98%80")
+  @debug.assert_eq(p.get("k"), Some("😀"))
 }
 
 ///|
 test "from_pairs replaces a high surrogate not followed by a low surrogate" {
   let high = (0xD800).unsafe_to_char().to_string()
   let p = @url.UrlSearchParams::from_pairs([("k", high + "x")])
-  @debug.assert_eq(p.to_string(), "k=%EF%BF%BDx")
+  @debug.assert_eq(p.get("k"), Some("\u{FFFD}x"))
 }

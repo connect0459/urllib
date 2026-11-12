@@ -30,6 +30,8 @@ pub fn string_to_chars(String) -> Array[Char]
 
 pub fn strip_leading_char(String, Char) -> String
 
+pub fn to_usv_string(String) -> String
+
 pub fn utf8_bytes_to_string(Array[Int32]) -> String
 
 // Errors

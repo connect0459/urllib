@@ -22,6 +22,21 @@ pub fn is_surrogate(cp : Int32) -> Bool {
 let replacement_char : Int32 = 0xFFFD
 
 ///|
+/// Converts a string to a USVString by replacing each lone surrogate with
+/// U+FFFD. Valid surrogate pairs are preserved.
+pub fn to_usv_string(s : String) -> String {
+  let buf = StringBuilder()
+  for c in s {
+    if is_surrogate(c.to_int()) {
+      buf.write_char('\u{FFFD}')
+    } else {
+      buf.write_char(c)
+    }
+  }
+  buf.to_string()
+}
+
+///|
 pub fn strip_leading_char(s : String, c : Char) -> String {
   match s.get_char(0) {
     Some(head) if head == c => s[1:].to_owned()
