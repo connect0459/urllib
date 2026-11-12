@@ -198,7 +198,9 @@ test "WPT IdnaTestV2: strict domain_to_ascii agrees with the standard on every n
   for i in 0..<n {
     println(failures[i])
   }
-  println("WPT IdnaTestV2 strict: \{accepted - failures.length()}/\{accepted} accepted names agree")
+  println(
+    "WPT IdnaTestV2 strict: \{accepted - failures.length()}/\{accepted} accepted names agree",
+  )
   assert_true(accepted > 0)
   assert_eq(failures.length(), 0)
 }
