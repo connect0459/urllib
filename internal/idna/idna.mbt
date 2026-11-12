@@ -20,12 +20,6 @@ let no_break_space : Int32 = 0x00A0
 let ideographic_space : Int32 = 0x3000
 
 ///|
-let surrogate_start : Int32 = 0xD800
-
-///|
-let surrogate_end : Int32 = 0xDFFF
-
-///|
 pub suberror IdnaParseError {
   IdnaParseError(String)
 }
@@ -325,7 +319,7 @@ fn is_idna_forbidden_cp(cp : Int32) -> Bool {
   cp == ideographic_space ||
   cp == 0x1680 ||
   (cp >= 0x80 && cp <= 0x9F) ||
-  (cp >= surrogate_start && cp <= surrogate_end) ||
+  @pe.is_surrogate(cp) ||
   (cp >= 0x202A && cp <= 0x202E) ||
   (cp >= 0x2066 && cp <= 0x2069) ||
   cp == 0x06DD ||
