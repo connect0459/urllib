@@ -21,7 +21,7 @@ pub struct UrlPattern {
 }
 pub fn UrlPattern::compare_component(UrlPatternComponent, Self, Self) -> Int32
 pub fn UrlPattern::exec_init(Self, UrlPatternInit) -> UrlPatternResult?
-pub fn UrlPattern::exec_url(Self, String) -> UrlPatternResult?
+pub fn UrlPattern::exec_url(Self, String, base_url? : String) -> UrlPatternResult?
 pub fn UrlPattern::from_init(UrlPatternInit, ignore_case? : Bool) -> Self raise UrlPatternError
 pub fn UrlPattern::from_string(String, String?, ignore_case? : Bool) -> Self raise UrlPatternError
 pub fn UrlPattern::generate(Self, UrlPatternComponent, Map[String, String]) -> String?
@@ -35,7 +35,7 @@ pub fn UrlPattern::get_search(Self) -> String
 pub fn UrlPattern::get_username(Self) -> String
 pub fn UrlPattern::has_regexp_groups(Self) -> Bool
 pub fn UrlPattern::test_init(Self, UrlPatternInit) -> Bool
-pub fn UrlPattern::test_url(Self, String) -> Bool
+pub fn UrlPattern::test_url(Self, String, base_url? : String) -> Bool
 
 #derive(Eq, @debug.Debug)
 pub(all) enum UrlPatternComponent {

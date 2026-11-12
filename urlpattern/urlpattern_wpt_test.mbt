@@ -346,15 +346,10 @@ test "WPT URLPattern: URL string resolved against a base URL matches the compile
             continue
           }
         }
-        let result : @urlpattern.UrlPatternResult? = match
-          @url.parse_maybe(base_str, None) {
-          None => None
-          Some(base_url) =>
-            match @url.parse_maybe(input_str, Some(base_url)) {
-              None => None
-              Some(resolved) => pattern.exec_url(resolved.href())
-            }
-        }
+        let result : @urlpattern.UrlPatternResult? = pattern.exec_url(
+          input_str,
+          base_url=base_str,
+        )
         let expected = item.get("expected_match")
         match (result, expected) {
           (None, Some(Null)) | (None, None) => passed += 1
@@ -557,15 +552,7 @@ test "WPT URLPattern: string pattern constructor — expected_obj normalization 
       String(url_str) =>
         if inputs_arr.length() == 2 {
           match inputs_arr[1] {
-            String(base_str) =>
-              match @url.parse_maybe(base_str, None) {
-                None => None
-                Some(base_url) =>
-                  match @url.parse_maybe(url_str, Some(base_url)) {
-                    None => None
-                    Some(resolved) => pattern.exec_url(resolved.href())
-                  }
-              }
+            String(base_str) => pattern.exec_url(url_str, base_url=base_str)
             _ => pattern.exec_url(url_str)
           }
         } else {

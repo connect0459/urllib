@@ -112,9 +112,9 @@ test {
 
 | Method | Signature | Description |
 | :--- | :--- | :--- |
-| `test_url` | `(String) -> Bool` | Returns `true` if the URL matches the pattern |
+| `test_url` | `(String, base_url? : String) -> Bool` | Returns `true` if the URL (resolved against the optional base) matches the pattern |
 | `test_init` | `(UrlPatternInit) -> Bool` | Returns `true` if the init object matches |
-| `exec_url` | `(String) -> UrlPatternResult?` | Match with captured group extraction |
+| `exec_url` | `(String, base_url? : String) -> UrlPatternResult?` | Match with captured group extraction; an invalid base yields `None` |
 | `exec_init` | `(UrlPatternInit) -> UrlPatternResult?` | Match init with captured group extraction |
 
 ```mbt check
