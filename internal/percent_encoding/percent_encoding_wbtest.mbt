@@ -217,3 +217,28 @@ test "percent_encode_byte: null byte is %00" {
 test "percent_encode_byte: high byte is uppercase hex" {
   assert_eq(percent_encode_byte(0xFF), "%FF")
 }
+
+///|
+test "is_surrogate accepts only the UTF-16 surrogate range" {
+  inspect(is_surrogate(0xD7FF), content="false")
+  inspect(is_surrogate(0xD800), content="true")
+  inspect(is_surrogate(0xDBFF), content="true")
+  inspect(is_surrogate(0xDC00), content="true")
+  inspect(is_surrogate(0xDFFF), content="true")
+  inspect(is_surrogate(0xE000), content="false")
+}
+
+///|
+test "to_usv_string keeps strings without lone surrogates unchanged" {
+  inspect(to_usv_string("a😀b"), content="a😀b")
+  inspect(to_usv_string(""), content="")
+}
+
+///|
+test "to_usv_string replaces lone high and low surrogates with U+FFFD" {
+  let high = (0xD800).unsafe_to_char().to_string()
+  let low = (0xDC00).unsafe_to_char().to_string()
+  inspect(to_usv_string("a" + high), content="a\u{FFFD}")
+  inspect(to_usv_string(low + "a"), content="\u{FFFD}a")
+  inspect(to_usv_string(low + high), content="\u{FFFD}\u{FFFD}")
+}

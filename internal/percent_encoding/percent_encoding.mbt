@@ -14,7 +14,27 @@ let surrogate_start : Int32 = 0xD800
 let surrogate_end : Int32 = 0xDFFF
 
 ///|
+pub fn is_surrogate(cp : Int32) -> Bool {
+  cp >= surrogate_start && cp <= surrogate_end
+}
+
+///|
 let replacement_char : Int32 = 0xFFFD
+
+///|
+/// Converts a string to a USVString by replacing each lone surrogate with
+/// U+FFFD. Valid surrogate pairs are preserved.
+pub fn to_usv_string(s : String) -> String {
+  let buf = StringBuilder()
+  for c in s {
+    if is_surrogate(c.to_int()) {
+      buf.write_char('\u{FFFD}')
+    } else {
+      buf.write_char(c)
+    }
+  }
+  buf.to_string()
+}
 
 ///|
 pub fn strip_leading_char(s : String, c : Char) -> String {
@@ -119,11 +139,7 @@ pub fn percent_encode_byte(byte : Int32) -> String {
 /// match the WHATWG "UTF-8 encode" algorithm applied to USVStrings.
 pub fn char_to_utf8_bytes(c : Char) -> Array[Int32] {
   let raw_cp = c.to_int()
-  let cp = if raw_cp >= surrogate_start && raw_cp <= surrogate_end {
-    replacement_char
-  } else {
-    raw_cp
-  }
+  let cp = if is_surrogate(raw_cp) { replacement_char } else { raw_cp }
   let result : Array[Int32] = []
   if cp <= utf8_1byte_max {
     result.push(cp)
@@ -146,11 +162,7 @@ pub fn char_to_utf8_bytes(c : Char) -> Array[Int32] {
 ///|
 fn push_utf8_bytes(c : Char, bytes : Array[Int32]) -> Unit {
   let raw_cp = c.to_int()
-  let cp = if raw_cp >= surrogate_start && raw_cp <= surrogate_end {
-    replacement_char
-  } else {
-    raw_cp
-  }
+  let cp = if is_surrogate(raw_cp) { replacement_char } else { raw_cp }
   if cp <= utf8_1byte_max {
     bytes.push(cp)
   } else if cp <= utf8_2byte_max {
@@ -180,11 +192,7 @@ fn write_percent_encoded_byte(byte : Int32, buf : StringBuilder) -> Unit {
 ///|
 fn write_percent_encoded_char(c : Char, buf : StringBuilder) -> Unit {
   let raw_cp = c.to_int()
-  let cp = if raw_cp >= surrogate_start && raw_cp <= surrogate_end {
-    replacement_char
-  } else {
-    raw_cp
-  }
+  let cp = if is_surrogate(raw_cp) { replacement_char } else { raw_cp }
   if cp <= utf8_1byte_max {
     write_percent_encoded_byte(cp, buf)
   } else if cp <= utf8_2byte_max {

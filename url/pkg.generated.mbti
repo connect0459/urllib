@@ -101,6 +101,8 @@ pub fn UrlSearchParams::delete(Self, String) -> Unit
 pub fn UrlSearchParams::delete_entry(Self, String, String) -> Unit
 pub fn UrlSearchParams::entries(Self) -> Iter[(String, String)]
 pub fn UrlSearchParams::for_each(Self, (String, String) -> Unit) -> Unit
+pub fn UrlSearchParams::from_pairs(Array[(String, String)]) -> Self
+pub fn UrlSearchParams::from_record(Map[String, String]) -> Self
 pub fn UrlSearchParams::from_string(String) -> Self
 pub fn UrlSearchParams::get(Self, String) -> String?
 pub fn UrlSearchParams::get_all(Self, String) -> Array[String]

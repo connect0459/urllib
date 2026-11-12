@@ -112,7 +112,7 @@ fn punycode_decode(input : String) -> Array[Int32] raise IdnaParseError {
     }
     n = n + dn
     i = i % out_plus1
-    if n >= 0xD800 && n <= 0xDFFF {
+    if @pe.is_surrogate(n) {
       raise IdnaParseError("punycode: surrogate code point")
     }
     output.insert(i, n)
