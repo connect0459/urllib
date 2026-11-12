@@ -133,6 +133,10 @@ pub fn Url::path_segments(self : Url) -> Iter[String]? {
 /// Converts a domain name to its ACE/Punycode form per UTS#46;
 /// returns `""` on error.
 ///
+/// With `strict=true`, the hyphen restrictions, the STD3 ASCII rules and the
+/// DNS length limits apply, matching `beStrict` in the WHATWG URL Standard's
+/// `domainToASCII`.
+///
 /// ### Example
 ///
 /// ```mbt check
@@ -141,8 +145,8 @@ pub fn Url::path_segments(self : Url) -> Iter[String]? {
 ///   inspect(@url.domain_to_ascii("EXAMPLE.COM"), content="example.com")
 /// }
 /// ```
-pub fn domain_to_ascii(domain : String) -> String {
-  @idna.domain_to_ascii(domain) catch {
+pub fn domain_to_ascii(domain : String, strict~ : Bool = false) -> String {
+  @idna.domain_to_ascii(domain, strict~) catch {
     _ => ""
   }
 }

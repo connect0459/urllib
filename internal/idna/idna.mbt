@@ -352,7 +352,10 @@ fn is_idna_forbidden_cp(cp : Int32) -> Bool {
 }
 
 ///|
-pub fn domain_to_ascii(domain : String) -> String raise IdnaParseError {
+pub fn domain_to_ascii(
+  domain : String,
+  strict~ : Bool = false,
+) -> String raise IdnaParseError {
   if domain.is_empty() {
     raise IdnaParseError("empty domain")
   }
@@ -382,6 +385,9 @@ pub fn domain_to_ascii(domain : String) -> String raise IdnaParseError {
   if mapped.is_empty() {
     raise IdnaParseError("empty domain")
   }
+  if strict && mapped.iter().any(fn(c) { is_std3_disallowed(c.to_int()) }) {
+    raise IdnaParseError("domain has STD3-disallowed code point")
+  }
   let labels = @pe.split_on_char(mapped, '.')
   let domain_is_ascii = mapped.iter().all(fn(c) { c.to_int() <= 0x7F })
   let out = StringBuilder()
@@ -405,6 +411,12 @@ pub fn domain_to_ascii(domain : String) -> String raise IdnaParseError {
         cps.push(c.to_int())
       }
       let cps = nfc_compose(cps)
+      if strict {
+        check_hyphens(cps)
+        if cps.any(is_std3_disallowed) {
+          raise IdnaParseError("label has STD3-disallowed code point")
+        }
+      }
       if label.has_prefix("xn--") {
         raise IdnaParseError("invalid ACE label: non-ASCII in xn-- label")
       }
@@ -422,7 +434,7 @@ pub fn domain_to_ascii(domain : String) -> String raise IdnaParseError {
       out.write_string("xn--")
       out.write_string(encoded)
     } else {
-      if label.has_prefix("xn--") && !domain_is_ascii {
+      if label.has_prefix("xn--") && (strict || !domain_is_ascii) {
         let suffix = label[4:].to_owned()
         if suffix.is_empty() {
           raise IdnaParseError("invalid ACE label: empty xn-- extension")
@@ -461,8 +473,18 @@ pub fn domain_to_ascii(domain : String) -> String raise IdnaParseError {
             )
           }
         }
+        if strict {
+          check_hyphens(decoded)
+          if decoded.any(is_std3_disallowed) {
+            raise IdnaParseError(
+              "decoded ACE label has STD3-disallowed code point",
+            )
+          }
+        }
         validate_contextj(decoded)
         validate_bidi(decoded)
+      } else if strict {
+        check_hyphens(label.to_array().map(fn(c) { c.to_int() }))
       }
       out.write_string(label)
     }
@@ -471,7 +493,56 @@ pub fn domain_to_ascii(domain : String) -> String raise IdnaParseError {
   if result.is_empty() {
     raise IdnaParseError("empty domain")
   }
+  if strict {
+    verify_dns_length(result)
+  }
   result
+}
+
+///|
+fn is_std3_disallowed(cp : Int32) -> Bool {
+  if cp <= 0x7F {
+    let is_ldh = (cp >= 0x61 && cp <= 0x7A) ||
+      (cp >= 0x41 && cp <= 0x5A) ||
+      (cp >= 0x30 && cp <= 0x39) ||
+      cp == 0x2D ||
+      cp == 0x2E
+    return !is_ldh
+  }
+  cp == 0x2260 || cp == 0x226E || cp == 0x226F
+}
+
+///|
+fn check_hyphens(cps : Array[Int32]) -> Unit raise IdnaParseError {
+  let hyphen = '-'.to_int()
+  if cps.length() == 0 {
+    return
+  }
+  if cps[0] == hyphen || cps[cps.length() - 1] == hyphen {
+    raise IdnaParseError("label starts or ends with a hyphen (V3)")
+  }
+  if cps.length() >= 4 && cps[2] == hyphen && cps[3] == hyphen {
+    raise IdnaParseError(
+      "label has hyphens in the third and fourth positions (V2)",
+    )
+  }
+}
+
+///|
+fn verify_dns_length(ascii : String) -> Unit raise IdnaParseError {
+  let name = if ascii.has_suffix(".") {
+    ascii[:ascii.length() - 1].to_owned()
+  } else {
+    ascii
+  }
+  if name.length() < 1 || name.length() > 253 {
+    raise IdnaParseError("domain length is outside 1..253 octets")
+  }
+  for label in @pe.split_on_char(name, '.') {
+    if label.length() < 1 || label.length() > 63 {
+      raise IdnaParseError("label length is outside 1..63 octets")
+    }
+  }
 }
 
 ///|
