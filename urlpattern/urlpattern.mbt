@@ -2,6 +2,7 @@
 let max_port : Int32 = 65535
 
 ///|
+#derive(Eq)
 priv enum ComponentKind {
   Protocol
   Username
@@ -12,7 +13,7 @@ priv enum ComponentKind {
   OpaquePathname
   Search
   Hash
-} derive(Eq)
+}
 
 ///|
 fn canonicalize_protocol_for_pattern(

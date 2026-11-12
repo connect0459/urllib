@@ -20,12 +20,13 @@ let nonchar_plane_sentinel_lower : Int32 = 0xFFFE
 let nonchar_plane_sentinel_upper : Int32 = 0xFFFF
 
 ///|
+#derive(Eq, Debug)
 pub enum Host {
   Domain(String)
   Ipv4(UInt32)
   Ipv6(Array[UInt32])
   OpaqueHost(String)
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Host with Eq::{not_equal, equal}

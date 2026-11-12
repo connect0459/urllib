@@ -1,4 +1,5 @@
 ///|
+#derive(Eq)
 priv enum CspState {
   CspInit
   CspProtocol
@@ -11,7 +12,7 @@ priv enum CspState {
   CspSearch
   CspHash
   CspDone
-} derive(Eq)
+}
 
 ///|
 priv struct Csp {
