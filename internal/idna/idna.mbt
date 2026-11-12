@@ -379,9 +379,6 @@ pub fn domain_to_ascii(
   if mapped.is_empty() {
     raise IdnaParseError("empty domain")
   }
-  if strict && mapped.iter().any(fn(c) { is_std3_disallowed(c.to_int()) }) {
-    raise IdnaParseError("domain has STD3-disallowed code point")
-  }
   let labels = @pe.split_on_char(mapped, '.')
   let domain_is_ascii = mapped.iter().all(fn(c) { c.to_int() <= 0x7F })
   let out = StringBuilder()
@@ -407,6 +404,9 @@ pub fn domain_to_ascii(
       let cps = nfc_compose(cps)
       if strict {
         check_hyphens(cps)
+        if cps.any(is_non_ldh_ascii) {
+          raise IdnaParseError("label has STD3-disallowed code point")
+        }
       }
       if label.has_prefix("xn--") {
         raise IdnaParseError("invalid ACE label: non-ASCII in xn-- label")
@@ -466,7 +466,7 @@ pub fn domain_to_ascii(
         }
         if strict {
           check_hyphens(decoded)
-          if decoded.any(is_std3_disallowed) {
+          if decoded.any(is_non_ldh_ascii) {
             raise IdnaParseError(
               "decoded ACE label has STD3-disallowed code point",
             )
@@ -475,7 +475,11 @@ pub fn domain_to_ascii(
         validate_contextj(decoded)
         validate_bidi(decoded)
       } else if strict {
-        check_hyphens(label.to_array().map(fn(c) { c.to_int() }))
+        let cps = label.to_array().map(fn(c) { c.to_int() })
+        check_hyphens(cps)
+        if cps.any(is_non_ldh_ascii) {
+          raise IdnaParseError("label has STD3-disallowed code point")
+        }
       }
       out.write_string(label)
     }
@@ -491,16 +495,13 @@ pub fn domain_to_ascii(
 }
 
 ///|
-fn is_std3_disallowed(cp : Int32) -> Bool {
-  if cp <= 0x7F {
-    let is_ldh = (cp >= 0x61 && cp <= 0x7A) ||
-      (cp >= 0x41 && cp <= 0x5A) ||
-      (cp >= 0x30 && cp <= 0x39) ||
-      cp == 0x2D ||
-      cp == 0x2E
-    return !is_ldh
-  }
-  cp == 0x2260 || cp == 0x226E || cp == 0x226F
+fn is_non_ldh_ascii(cp : Int32) -> Bool {
+  cp <= 0x7F &&
+  !((cp >= 0x61 && cp <= 0x7A) ||
+  (cp >= 0x41 && cp <= 0x5A) ||
+  (cp >= 0x30 && cp <= 0x39) ||
+  cp == 0x2D ||
+  cp == 0x2E)
 }
 
 ///|
