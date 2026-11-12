@@ -73,6 +73,9 @@ connect0459/uri                   — URL parser/API (deps: @host, @pe)
 - [x] **Phase 7 — WPT percent-encoding: 14/14** — no implementation changes needed; non-UTF-8 encoding variants out of scope
 - [x] **Phase 8 — WPT static methods + URLSearchParams operations** — `can_parse` 4/4, `parse_maybe` 4/4, `to_json` 1/1, all URLSearchParams operation suites 55/55
 - [x] **Phase 9 — WPT IdnaTestV2: 2670/2670 (100%)** — full UTS#46 table-driven processing; NFC composition; CONTEXTJ ZWJ validation; BIDI RTL/Latin rejection
+- [x] **Strict-mode oracle — Unicode `IdnaTestV2.txt` 18.0.0** — vendored under `testdata/unicode`; `domain_to_ascii(strict=true)` agrees on all cases except two documented groups
+  - Known limitation: the RFC 5893 Bidi rule (B1–B6) is approximated by an RTL/LTR mixing check, so names the oracle rejects with a `B*` status are accepted; a faithful check needs the `Bidi_Class` table
+  - Spec interpretation difference: a trailing root dot is accepted (UTS #46 §4.2 excludes the root label from the DNS length check) although `IdnaTestV2.txt` reports `A4_2`
 
 ---
 

@@ -11,6 +11,13 @@ fetch-unicode-data version='18.0.0':
     curl -fsSL -o /tmp/DerivedGeneralCategory.txt https://www.unicode.org/Public/{{version}}/ucd/extracted/DerivedGeneralCategory.txt
     curl -fsSL -o /tmp/IdnaMappingTable.txt https://www.unicode.org/Public/{{version}}/idna/IdnaMappingTable.txt
 
+# Vendor the Unicode IdnaTestV2.txt used as the strict-mode oracle
+# Usage: just vendor-idna-test-v2            (Unicode 18.0.0)
+#        just vendor-idna-test-v2 18.0.0
+vendor-idna-test-v2 version='18.0.0':
+    mkdir -p testdata/unicode
+    curl -fsSL -o testdata/unicode/IdnaTestV2.txt https://www.unicode.org/Public/{{version}}/idna/IdnaTestV2.txt
+
 # Regenerate combining mark table from DerivedGeneralCategory.txt
 # Usage: just gen-combining-mark                         (reads /tmp/DerivedGeneralCategory.txt)
 #        just gen-combining-mark /path/to/DerivedGeneralCategory.txt
