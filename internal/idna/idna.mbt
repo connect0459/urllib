@@ -413,9 +413,6 @@ pub fn domain_to_ascii(
       let cps = nfc_compose(cps)
       if strict {
         check_hyphens(cps)
-        if cps.any(is_std3_disallowed) {
-          raise IdnaParseError("label has STD3-disallowed code point")
-        }
       }
       if label.has_prefix("xn--") {
         raise IdnaParseError("invalid ACE label: non-ASCII in xn-- label")
