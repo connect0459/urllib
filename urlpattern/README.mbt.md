@@ -224,6 +224,7 @@ All fields default to `None` (wildcard) when omitted.
 
 ```mbt nocheck
 ///|
+#derive(Eq, @debug.Debug)
 pub(all) enum UrlPatternComponent {
   Protocol
   Username
@@ -233,7 +234,7 @@ pub(all) enum UrlPatternComponent {
   Pathname
   Search
   Hash
-} derive(Eq, @debug.Debug)
+}
 ```
 
 Used as the component selector in `compare_component` and `generate`.

@@ -3,6 +3,7 @@ package "connect0459/urllib/url"
 
 import {
   "moonbitlang/core/debug",
+  "moonbitlang/core/json",
 }
 
 // Values
@@ -33,9 +34,10 @@ pub fn UrlParseError::to_string(Self) -> String
 pub impl Show for UrlParseError
 
 // Types and methods
+#derive(Eq, @debug.Debug)
 pub struct Url {
   // private fields
-} derive(Eq, @debug.Debug)
+}
 pub fn Url::authority(Self) -> String
 pub fn Url::domain(Self) -> String?
 pub fn Url::equal(Self, Self) -> Bool
@@ -80,14 +82,15 @@ pub fn Url::set_protocol(Self, String) -> Self
 pub fn Url::set_search(Self, String) -> Self
 pub fn Url::set_username(Self, String) -> Self
 pub fn Url::to_file_path(Self) -> String raise UrlParseError
-pub fn Url::to_json(Self) -> Json
+pub fn Url::to_json(Self) -> @json.Json
 pub fn Url::to_repr(Self) -> @debug.Repr
 pub fn Url::to_string(Self) -> String
 pub fn Url::username(Self) -> String
 pub impl Show for Url
-pub impl ToJson for Url
+pub impl @json.ToJson for Url
 
-type UrlPath derive(@debug.Debug)
+#derive(@debug.Debug)
+type UrlPath
 pub fn UrlPath::to_repr(Self) -> @debug.Repr
 
 pub struct UrlSearchParams {

@@ -2,6 +2,7 @@
 /// Per-component pattern strings used to construct a `UrlPattern`.
 /// Each field is a pattern string for the corresponding URL component;
 /// `None` means "use the wildcard default".
+#derive(Debug)
 pub struct UrlPatternInit {
   priv protocol : String?
   priv username : String?
@@ -12,7 +13,7 @@ pub struct UrlPatternInit {
   priv search : String?
   priv hash : String?
   priv base_url : String?
-} derive(Debug)
+}
 
 ///|
 pub extend UrlPatternInit with @moonbitlang/core/debug.Debug::{to_repr}
@@ -47,10 +48,11 @@ pub fn UrlPatternInit::new(
 ///|
 /// Input accepted by `exec` and `test` methods: either a URL string or a
 /// per-component `UrlPatternInit`.
+#derive(Debug)
 pub enum UrlPatternInput {
   Str(String)
   Init(UrlPatternInit)
-} derive(Debug)
+}
 
 ///|
 pub extend UrlPatternInput with @moonbitlang/core/debug.Debug::{to_repr}
@@ -58,10 +60,11 @@ pub extend UrlPatternInput with @moonbitlang/core/debug.Debug::{to_repr}
 ///|
 /// Match result for a single URL component: the matched input string and a
 /// map of named capture group names to their matched values.
+#derive(Debug)
 pub struct UrlPatternComponentResult {
   priv input : String
   priv groups : Map[String, String?]
-} derive(Debug)
+}
 
 ///|
 pub extend UrlPatternComponentResult with @moonbitlang/core/debug.Debug::{
@@ -87,6 +90,7 @@ pub fn UrlPatternComponentResult::groups(
 ///|
 /// Aggregate match result returned by `exec_url` and `exec_init`, containing
 /// per-component results for every URL component.
+#derive(Debug)
 pub struct UrlPatternResult {
   priv inputs : Array[UrlPatternInput]
   priv protocol : UrlPatternComponentResult?
@@ -97,7 +101,7 @@ pub struct UrlPatternResult {
   priv pathname : UrlPatternComponentResult?
   priv search : UrlPatternComponentResult?
   priv hash : UrlPatternComponentResult?
-} derive(Debug)
+}
 
 ///|
 pub extend UrlPatternResult with @moonbitlang/core/debug.Debug::{to_repr}
@@ -194,6 +198,7 @@ pub extend UrlPatternError with Show::{to_string, output}
 /// Identifies one of the eight URL components a `UrlPattern` operates on.
 /// Used by `UrlPattern::compare_component` and `UrlPattern::generate` to
 /// select which part of the pattern to act on.
+#derive(Eq, Debug)
 pub(all) enum UrlPatternComponent {
   Protocol
   Username
@@ -203,7 +208,7 @@ pub(all) enum UrlPatternComponent {
   Pathname
   Search
   Hash
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend UrlPatternComponent with Eq::{not_equal, equal}

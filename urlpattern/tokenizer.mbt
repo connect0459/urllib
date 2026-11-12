@@ -1,4 +1,5 @@
 ///|
+#derive(Eq)
 priv enum TokenType {
   InvalidChar
   Open
@@ -10,13 +11,14 @@ priv enum TokenType {
   OtherModifier
   Asterisk
   End
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 priv enum TokenizePolicy {
   Strict
   Lenient
-} derive(Eq)
+}
 
 ///|
 priv struct Token {

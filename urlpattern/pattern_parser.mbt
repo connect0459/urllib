@@ -23,20 +23,22 @@ let unicode_variation_selector_start : Int32 = 0xE0100
 let unicode_variation_selector_end : Int32 = 0xE01EF
 
 ///|
+#derive(Eq)
 priv enum PartType {
   FixedText
   Regexp
   SegmentWildcard
   FullWildcard
-} derive(Eq)
+}
 
 ///|
+#derive(Eq)
 priv enum PartModifier {
   NoMod
   Optional
   ZeroOrMore
   OneOrMore
-} derive(Eq)
+}
 
 ///|
 priv struct Part {

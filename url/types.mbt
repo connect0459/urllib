@@ -4,10 +4,11 @@ using @host {type Host}
 ///|
 /// The path of a parsed URL: either an ordered list of decoded path segments
 /// or an opaque string for cannot-be-a-base URLs.
+#derive(Debug)
 enum UrlPath {
   Segments(Array[String])
   Opaque(String)
-} derive(Debug)
+}
 
 ///|
 pub extend UrlPath with @moonbitlang/core/debug.Debug::{to_repr}
@@ -40,6 +41,7 @@ pub extend UrlParseError with Show::{to_string, output}
 ///|
 /// An immutable parsed URL. All setter methods return a new `Url` value
 /// rather than modifying this one.
+#derive(Eq, Debug)
 pub struct Url {
   priv scheme : String
   priv username : String
@@ -49,7 +51,7 @@ pub struct Url {
   priv path : UrlPath
   priv query : String?
   priv fragment : String?
-} derive(Eq, Debug)
+}
 
 ///|
 pub extend Url with Eq::{not_equal, equal}

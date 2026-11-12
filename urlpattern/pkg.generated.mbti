@@ -37,6 +37,7 @@ pub fn UrlPattern::has_regexp_groups(Self) -> Bool
 pub fn UrlPattern::test_init(Self, UrlPatternInit) -> Bool
 pub fn UrlPattern::test_url(Self, String) -> Bool
 
+#derive(Eq, @debug.Debug)
 pub(all) enum UrlPatternComponent {
   Protocol
   Username
@@ -46,33 +47,37 @@ pub(all) enum UrlPatternComponent {
   Pathname
   Search
   Hash
-} derive(Eq, @debug.Debug)
+}
 pub fn UrlPatternComponent::equal(Self, Self) -> Bool
 pub fn UrlPatternComponent::not_equal(Self, Self) -> Bool
 pub fn UrlPatternComponent::to_repr(Self) -> @debug.Repr
 
+#derive(@debug.Debug)
 pub struct UrlPatternComponentResult {
   // private fields
-} derive(@debug.Debug)
+}
 pub fn UrlPatternComponentResult::groups(Self) -> Map[String, String?]
 pub fn UrlPatternComponentResult::input(Self) -> String
 pub fn UrlPatternComponentResult::to_repr(Self) -> @debug.Repr
 
+#derive(@debug.Debug)
 pub struct UrlPatternInit {
   // private fields
-} derive(@debug.Debug)
+}
 pub fn UrlPatternInit::new(protocol? : String?, username? : String?, password? : String?, hostname? : String?, port? : String?, pathname? : String?, search? : String?, hash? : String?, base_url? : String?) -> Self
 pub fn UrlPatternInit::to_repr(Self) -> @debug.Repr
 
+#derive(@debug.Debug)
 pub enum UrlPatternInput {
   Str(String)
   Init(UrlPatternInit)
-} derive(@debug.Debug)
+}
 pub fn UrlPatternInput::to_repr(Self) -> @debug.Repr
 
+#derive(@debug.Debug)
 pub struct UrlPatternResult {
   // private fields
-} derive(@debug.Debug)
+}
 pub fn UrlPatternResult::hash(Self) -> UrlPatternComponentResult?
 pub fn UrlPatternResult::hostname(Self) -> UrlPatternComponentResult?
 pub fn UrlPatternResult::inputs(Self) -> Array[UrlPatternInput]
