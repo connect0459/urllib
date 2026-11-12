@@ -489,6 +489,25 @@ test "domain_to_ascii strict: trailing root dot is accepted" {
 }
 
 ///|
+test "domain_to_ascii strict: 253 octets followed by a root dot is accepted" {
+  let l63 = "a".repeat(63)
+  let name = l63 + "." + l63 + "." + l63 + "." + "a".repeat(61) + "."
+  assert_eq(@url.domain_to_ascii(name, strict=true), name)
+}
+
+///|
+test "domain_to_ascii strict: two trailing dots are rejected" {
+  assert_eq(@url.domain_to_ascii("example.com..", strict=true), "")
+  assert_eq(@url.domain_to_ascii("example.com.."), "example.com..")
+}
+
+///|
+test "domain_to_ascii strict: a lone root dot is rejected" {
+  assert_eq(@url.domain_to_ascii(".", strict=true), "")
+  assert_eq(@url.domain_to_ascii("."), ".")
+}
+
+///|
 test "domain_to_ascii strict: non-LDH ASCII character is rejected" {
   assert_eq(@url.domain_to_ascii("a_b.com", strict=true), "")
   assert_eq(@url.domain_to_ascii("a_b.com"), "a_b.com")
