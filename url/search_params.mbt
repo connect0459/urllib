@@ -65,6 +65,83 @@ pub fn UrlSearchParams::from_string(s : String) -> UrlSearchParams {
 }
 
 ///|
+fn to_usv_string(s : String) -> String {
+  let buf = StringBuilder()
+  let n = s.length()
+  let mut i = 0
+  while i < n {
+    let unit = s.code_unit_at(i).to_int()
+    if unit >= 0xD800 && unit <= 0xDBFF {
+      if i + 1 < n {
+        let next = s.code_unit_at(i + 1).to_int()
+        if next >= 0xDC00 && next <= 0xDFFF {
+          buf.write_char(
+            (utf16_supplementary_offset +
+            ((unit - utf16_high_surrogate_base) << 10) +
+            (next - utf16_low_surrogate_base)).unsafe_to_char(),
+          )
+          i += 2
+          continue
+        }
+      }
+      buf.write_char('\u{FFFD}')
+    } else if unit >= 0xDC00 && unit <= 0xDFFF {
+      buf.write_char('\u{FFFD}')
+    } else {
+      buf.write_char(unit.unsafe_to_char())
+    }
+    i += 1
+  }
+  buf.to_string()
+}
+
+///|
+/// Creates `UrlSearchParams` from a sequence of name/value pairs, preserving
+/// order and duplicate names. Lone surrogates are replaced with U+FFFD, as the
+/// WHATWG `USVString` conversion requires.
+///
+/// ### Example
+///
+/// ```mbt check
+/// test {
+///   let sp = @url.UrlSearchParams::from_pairs([("a", "1"), ("a", "2")])
+///   inspect(sp.to_string(), content="a=1&a=2")
+/// }
+/// ```
+pub fn UrlSearchParams::from_pairs(
+  pairs : Array[(String, String)],
+) -> UrlSearchParams {
+  let sp = UrlSearchParams::new()
+  for pair in pairs {
+    sp.append(to_usv_string(pair.0), to_usv_string(pair.1))
+  }
+  sp
+}
+
+///|
+/// Creates `UrlSearchParams` from a record. Keys are unique, and pairs follow
+/// the map's insertion order. Lone surrogates are replaced with U+FFFD.
+///
+/// ### Example
+///
+/// ```mbt check
+/// test {
+///   let m : Map[String, String] = Map([])
+///   m["a"] = "1"
+///   inspect(@url.UrlSearchParams::from_record(m).to_string(), content="a=1")
+/// }
+/// ```
+pub fn UrlSearchParams::from_record(
+  record : Map[String, String],
+) -> UrlSearchParams {
+  let sp = UrlSearchParams::new()
+  for name, value in record {
+    sp.append(to_usv_string(name), to_usv_string(value))
+  }
+  sp
+}
+
+///|
 /// Appends a new name/value pair at the end of the list.
 pub fn UrlSearchParams::append(
   self : UrlSearchParams,

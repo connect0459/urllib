@@ -287,6 +287,8 @@ pub impl Show for UrlSearchParams
 | :--- | :--- |
 | `UrlSearchParams::new()` | Empty params |
 | `UrlSearchParams::from_string(String)` | Parse `application/x-www-form-urlencoded` data |
+| `UrlSearchParams::from_pairs(Array[(String, String)])` | Build from name/value pairs, keeping order and duplicates; lone surrogates become U+FFFD |
+| `UrlSearchParams::from_record(Map[String, String])` | Build from a record in insertion order; lone surrogates become U+FFFD |
 
 #### Read operations
 
