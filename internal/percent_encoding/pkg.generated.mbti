@@ -6,6 +6,8 @@ pub fn char_to_utf8_bytes(Char) -> Array[Int32]
 
 pub fn hex_digit_value(Char) -> Int32?
 
+pub fn is_surrogate(Int32) -> Bool
+
 pub fn percent_decode(String) -> String
 
 pub fn percent_encode_byte(Int32) -> String

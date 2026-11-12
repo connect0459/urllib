@@ -217,3 +217,13 @@ test "percent_encode_byte: null byte is %00" {
 test "percent_encode_byte: high byte is uppercase hex" {
   assert_eq(percent_encode_byte(0xFF), "%FF")
 }
+
+///|
+test "is_surrogate accepts only the UTF-16 surrogate range" {
+  inspect(is_surrogate(0xD7FF), content="false")
+  inspect(is_surrogate(0xD800), content="true")
+  inspect(is_surrogate(0xDBFF), content="true")
+  inspect(is_surrogate(0xDC00), content="true")
+  inspect(is_surrogate(0xDFFF), content="true")
+  inspect(is_surrogate(0xE000), content="false")
+}
