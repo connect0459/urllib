@@ -1239,3 +1239,18 @@ test "query_pairs returns pair with empty value for key-only param" {
     ([("key", "")] : Array[(String, String)]),
   )
 }
+
+///|
+test "domain_to_ascii strict: negated relation signs are valid IDNA characters" {
+  assert_eq(@url.domain_to_ascii("\u{2260}.com", strict=true), "xn--1ch.com")
+  assert_eq(@url.domain_to_ascii("\u{226E}.com", strict=true), "xn--gdh.com")
+  assert_eq(@url.domain_to_ascii("\u{226F}.com", strict=true), "xn--hdh.com")
+  assert_eq(@url.domain_to_ascii("xn--1ch.com", strict=true), "xn--1ch.com")
+}
+
+///|
+test "domain_to_ascii strict: STD3 rules apply after normalization" {
+  assert_eq(@url.domain_to_ascii("=\u{338}.com", strict=true), "xn--1ch.com")
+  assert_eq(@url.domain_to_ascii("a=b.com", strict=true), "")
+  assert_eq(@url.domain_to_ascii("\u{FF1D}.com", strict=true), "")
+}
