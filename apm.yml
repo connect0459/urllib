@@ -1,6 +1,6 @@
-name: urllib
+name: urllib-mbt
 version: 0.1.0
-description: APM project for urllib
+description: APM project for urllib-mbt
 author: connect0459
 dependencies:
   apm:

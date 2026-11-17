@@ -5,9 +5,9 @@
 ## Related Links
 
 - Issues
-  - <!-- <https://github.com/connect0459/urllib/issues/xxx> -->
+  - <!-- <https://github.com/connect0459/urllib-mbt/issues/xxx> -->
 - PRs
-  - <!-- <https://github.com/connect0459/urllib/pull/xxx> -->
+  - <!-- <https://github.com/connect0459/urllib-mbt/pull/xxx> -->
 
 ## [Required] Overview
 
