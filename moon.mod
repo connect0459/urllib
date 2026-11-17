@@ -4,7 +4,7 @@ version = "0.5.1"
 
 readme = "README.mbt.md"
 
-repository = "https://github.com/connect0459/urllib"
+repository = "https://github.com/connect0459/urllib-mbt"
 
 license = "Apache-2.0"
 
