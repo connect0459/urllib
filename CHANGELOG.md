@@ -22,6 +22,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-17
+
+### Added
+
+- `url`: add the `strict` option to `domain_to_ascii`, which applies the UTS #46 `CheckHyphens`, `UseSTD3ASCIIRules` and `VerifyDnsLength` checks on top of the default URL Standard behavior; the STD3 ASCII rules apply after normalization, so U+2260, U+226E and U+226F (valid in the Unicode 18.0.0 table) are accepted (#114, #117)
+- `url`: add `UrlSearchParams::from_pairs` and `UrlSearchParams::from_record` to build a query from an array of pairs or a record (#115)
+- `urlpattern`: accept an optional `base_url` in `UrlPattern::exec_url` and `UrlPattern::test_url`, so relative inputs resolve against it before matching (#116)
+
+### Miscellaneous
+
+- **repo**: rename repository from `urllib` back to `urllib-mbt`, so the suffix states the implementation platform alongside `urllib-lean`; the module name stays `connect0459/urllib` (#121)
+- **test**: add the Unicode `IdnaTestV2.txt` as an oracle for strict `domain_to_ascii`, vendored under `testdata/unicode`, and classify the remaining disagreements (the RFC 5893 Bidi rule approximation and the trailing root dot) (#117)
+- **chore**: apply `moon fmt` for the current toolchain and regenerate interfaces (#113)
+- **chore**: specify `language_version` for pre-commit hooks and bump `markdownlint-cli2` to 0.24.0 (#108, #109)
+- **ci**: bump `softprops/action-gh-release` from 3.0.3 to 3.0.4 (#120)
+- **docs**: require full URLs for issue references, and state that changelog entries are written in the Release PR (#110, #111)
+
 ## [0.5.1] - 2026-10-23
 
 ### Fixed
@@ -247,15 +264,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ---
 
-[Unreleased]: <https://github.com/connect0459/urllib/compare/v0.5.1...HEAD>
-[0.5.1]: <https://github.com/connect0459/urllib/compare/v0.5.0...v0.5.1>
-[0.5.0]: <https://github.com/connect0459/urllib/compare/v0.4.5...v0.5.0>
-[0.4.5]: <https://github.com/connect0459/urllib/compare/v0.4.4...v0.4.5>
-[0.4.4]: <https://github.com/connect0459/urllib/compare/v0.4.3...v0.4.4>
-[0.4.3]: <https://github.com/connect0459/urllib/compare/v0.4.2...v0.4.3>
-[0.4.2]: <https://github.com/connect0459/urllib/compare/v0.4.1...v0.4.2>
-[0.4.1]: <https://github.com/connect0459/urllib/compare/v0.4.0...v0.4.1>
-[0.4.0]: <https://github.com/connect0459/urllib/compare/v0.3.0...v0.4.0>
-[0.3.0]: <https://github.com/connect0459/urllib/compare/v0.2.0...v0.3.0>
-[0.2.0]: <https://github.com/connect0459/urllib/compare/v0.1.0...v0.2.0>
-[0.1.0]: <https://github.com/connect0459/urllib/releases/tag/v0.1.0>
+[Unreleased]: <https://github.com/connect0459/urllib-mbt/compare/v0.6.0...HEAD>
+[0.6.0]: <https://github.com/connect0459/urllib-mbt/compare/v0.5.1...v0.6.0>
+[0.5.1]: <https://github.com/connect0459/urllib-mbt/compare/v0.5.0...v0.5.1>
+[0.5.0]: <https://github.com/connect0459/urllib-mbt/compare/v0.4.5...v0.5.0>
+[0.4.5]: <https://github.com/connect0459/urllib-mbt/compare/v0.4.4...v0.4.5>
+[0.4.4]: <https://github.com/connect0459/urllib-mbt/compare/v0.4.3...v0.4.4>
+[0.4.3]: <https://github.com/connect0459/urllib-mbt/compare/v0.4.2...v0.4.3>
+[0.4.2]: <https://github.com/connect0459/urllib-mbt/compare/v0.4.1...v0.4.2>
+[0.4.1]: <https://github.com/connect0459/urllib-mbt/compare/v0.4.0...v0.4.1>
+[0.4.0]: <https://github.com/connect0459/urllib-mbt/compare/v0.3.0...v0.4.0>
+[0.3.0]: <https://github.com/connect0459/urllib-mbt/compare/v0.2.0...v0.3.0>
+[0.2.0]: <https://github.com/connect0459/urllib-mbt/compare/v0.1.0...v0.2.0>
+[0.1.0]: <https://github.com/connect0459/urllib-mbt/releases/tag/v0.1.0>
